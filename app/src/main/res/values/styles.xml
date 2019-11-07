@@ -1,25 +1,25 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:colorForeground">@color/colorForeground</item>
-        <item name="android:colorBackground">@color/colorBackground</item>
-        <item name="android:textColor">@color/colorAccent1</item>
+        <item name="android:colorForeground">@color/colorYellow</item>
+        <item name="android:colorBackground">@color/colorWhite</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:colorAccent">@color/colorBlack</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimary</item>
-        <item name="colorAccent">@color/colorAccent1</item>
-        <item name="android:colorForeground">@color/colorForeground</item>
+        <item name="colorPrimary">@color/colorYellow</item>
+        <item name="colorPrimaryDark">@color/colorYellow</item>
+        <item name="colorAccent">@color/colorBlack</item>
+        <item name="android:colorForeground">@color/colorYellow</item>
     </style>
 
     <style name="AppTheme.NoActionBar.Fullscreen">
-        <item name="android:colorForeground">@color/colorBackground</item>
-        <item name="android:colorBackground">@color/colorForeground</item>
-        <item name="android:textColor">@color/colorAccent1</item>
+        <item name="android:colorForeground">@color/colorWhite</item>
+        <item name="android:colorBackground">@color/colorYellow</item>
+        <item name="android:textColor">@color/colorBlack</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -27,7 +27,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppBrand">
-        <item name="android:textColor">@color/colorAccent1</item>
+        <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">@font/cera_stencil_pro_medium</item>
     </style>
