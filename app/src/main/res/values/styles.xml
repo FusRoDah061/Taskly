@@ -1,0 +1,39 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:colorForeground">@color/colorForeground</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:textColor">@color/colorAccent1</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent1</item>
+        <item name="android:colorForeground">@color/colorForeground</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Fullscreen">
+        <item name="android:colorForeground">@color/colorBackground</item>
+        <item name="android:colorBackground">@color/colorForeground</item>
+        <item name="android:textColor">@color/colorAccent1</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppBrand">
+        <item name="android:textColor">@color/colorAccent1</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/cera_stencil_pro_medium</item>
+    </style>
+
+    <style name="AppBrand.Large">
+        <item name="android:textSize">45sp</item>
+    </style>
+
+</resources>
