@@ -52,14 +52,4 @@
         <item name="android:background">@color/colorYellow</item>
     </style>
 
-    <style name="AppTheme.AppBrand">
-        <item name="android:textColor">@color/colorBlack</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:fontFamily">@font/cera_stencil_pro_medium</item>
-    </style>
-
-    <style name="AppTheme.AppBrand.Large">
-        <item name="android:textSize">45sp</item>
-    </style>
-
 </resources>
