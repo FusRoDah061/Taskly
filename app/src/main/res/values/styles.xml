@@ -1,38 +1,64 @@
 <resources>
 
+    <!-- Estilos globais -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:colorForeground">@color/colorYellow</item>
-        <item name="android:colorBackground">@color/colorWhite</item>
         <item name="android:textColor">@color/colorBlack</item>
-        <item name="android:colorAccent">@color/colorBlack</item>
+        <item name="android:actionMenuTextColor">@color/colorBlack</item>
+        <item name="android:colorForeground">@color/colorBlack</item>
+        <item name="colorControlNormal">@color/colorBlack</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
+    <!-- Estilos das activities com ActionBar -->
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
+        <item name="android:colorBackground">@color/colorWhite</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorYellow</item>
         <item name="colorPrimaryDark">@color/colorYellow</item>
-        <item name="colorAccent">@color/colorBlack</item>
-        <item name="android:colorForeground">@color/colorYellow</item>
+        <item name="colorAccent">@color/colorYellow</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.Fullscreen">
-        <item name="android:colorForeground">@color/colorWhite</item>
+    <!-- Estilos das activities sem ActionBar -->
+    <style name="AppTheme.NoActionBar.Fullscreen" parent="AppTheme">
         <item name="android:colorBackground">@color/colorYellow</item>
-        <item name="android:textColor">@color/colorBlack</item>
+        <item name="colorAccent">@color/colorBlack</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorControlNormal">@color/colorBlack</item>
+        <item name="colorBackgroundFloating">@color/colorBlack</item>
+        <item name="colorPrimary">@color/colorBlack</item>
+    </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorControlNormal">@color/colorBlack</item>
+        <item name="colorBackgroundFloating">@color/colorBlack</item>
+        <item name="colorPrimary">@color/colorBlack</item>
+    </style>
 
-    <style name="AppBrand">
+    <!-- Estilos de componentes -->
+
+    <style name="AppTheme.NavigationDrawer" parent="Widget.Design.NavigationView">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:background">@color/colorWhite</item>
+        <item name="itemTextColor">@color/colorBlack</item>
+        <item name="itemIconTint">@color/colorBlack</item>
+    </style>
+
+    <style name="AppTheme.NavigationDrawerHeader" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:colorBackgroundCacheHint">@color/colorYellow</item>
+        <item name="android:colorForeground">@color/colorYellow</item>
+        <item name="android:background">@color/colorYellow</item>
+    </style>
+
+    <style name="AppTheme.AppBrand">
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">@font/cera_stencil_pro_medium</item>
     </style>
 
-    <style name="AppBrand.Large">
+    <style name="AppTheme.AppBrand.Large">
         <item name="android:textSize">45sp</item>
     </style>
 

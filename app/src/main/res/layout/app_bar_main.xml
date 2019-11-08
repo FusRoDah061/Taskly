@@ -18,7 +18,7 @@
             android:background="@color/colorYellow"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:title="@string/app_name"
-            app:titleTextColor="@color/colorBlack"/>
+            app:titleTextColor="@color/colorBlack" />
 
     </android.support.design.widget.AppBarLayout>
 
