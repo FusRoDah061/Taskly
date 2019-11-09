@@ -10,8 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
+            android:name=".NovaTarefaActivity"
+            android:label="@string/title_activity_nova_tarefa"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar.Fullscreen">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.ifsp.aluno.allex.taskly.MainActivity" />
+        </activity>
+        <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

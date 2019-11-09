@@ -1,9 +1,11 @@
 package br.com.ifsp.aluno.allex.taskly;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -16,10 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
     private RecyclerView rvTarefas;
     private Spinner      spDiaFiltroTarefas;
@@ -43,20 +44,16 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_add_tarefa) {
+            abrirNovaTarefaActivity();
             return true;
         }
 
@@ -88,6 +85,14 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // TODO: Filtrar tarefas pela dia. Se for a opção "Selecionar...", abrir um datepicker
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) { }
+
     private void initComponents() {
         // Define a toolbar padrão
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -98,8 +103,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                abrirNovaTarefaActivity();
             }
         });
 
@@ -115,6 +119,9 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         rvTarefas = (RecyclerView) findViewById(R.id.rvTarefas);
+        // TODO: Preencher lista com tarefas criadas
+        // TODO: Criar o layout dos itens da lista
+        // TODO: No longtouch dos itens, abrir a bottom sheet
 
         //Inicializa o dropdown de filtro
         spDiaFiltroTarefas = (Spinner) findViewById(R.id.spDiaFiltroTarefas);
@@ -122,5 +129,11 @@ public class MainActivity extends AppCompatActivity
                 R.array.dias_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spDiaFiltroTarefas.setAdapter(adapter);
+        spDiaFiltroTarefas.setOnItemSelectedListener(this);
+    }
+
+    private void abrirNovaTarefaActivity() {
+        Intent intent = new Intent(this, NovaTarefaActivity.class);
+        startActivity(intent);
     }
 }

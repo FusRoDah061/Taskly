@@ -19,21 +19,41 @@
     </style>
 
     <!-- Estilos das activities sem ActionBar -->
-    <style name="AppTheme.NoActionBar.Fullscreen" parent="AppTheme">
+    <style name="AppTheme.NoActionBar.Fullscreen" parent="AppTheme.NoActionBar">
         <item name="android:colorBackground">@color/colorYellow</item>
         <item name="colorAccent">@color/colorBlack</item>
+        <item name="colorPrimary">@color/colorBlack</item>
     </style>
+
+    <!-- Estilos da ActionBar -->
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorControlNormal">@color/colorBlack</item>
         <item name="colorBackgroundFloating">@color/colorBlack</item>
         <item name="colorPrimary">@color/colorBlack</item>
+        <item name="android:colorPrimaryDark">@color/colorBlack</item>
+        <item name="android:textColorSecondary">@color/colorBlack</item>
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
         <item name="colorControlNormal">@color/colorBlack</item>
         <item name="colorBackgroundFloating">@color/colorBlack</item>
         <item name="colorPrimary">@color/colorBlack</item>
+        <item name="android:colorPrimaryDark">@color/colorBlack</item>
+        <item name="android:textColorSecondary">@color/colorBlack</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay.Fullscreen" parent="AppTheme.AppBarOverlay">
+        <item name="elevation">0dp</item>
+        <item name="android:translationZ">0.1dp</item>
+        <item name="android:fillColor">@color/colorBlack</item>
+        <item name="android:textColorPrimary">@color/colorBlack</item>
+        <item name="android:textColorSecondary">@color/colorBlack</item>
+        <item name="android:actionMenuTextColor">@color/colorBlack</item>
+        <item name="android:colorForeground">@color/colorBlack</item>
+        <item name="colorButtonNormal">@color/colorBlack</item>
+        <item name="colorControlHighlight">@color/colorBlack</item>
+        <item name="android:textColorTertiary">@color/colorBlack</item>
     </style>
 
     <!-- Estilos de componentes -->
@@ -52,4 +72,13 @@
         <item name="android:background">@color/colorYellow</item>
     </style>
 
+    <style name="AppTheme.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
+        <item name="android:background">@color/colorWhite</item>
+        <item name="colorPrimary">@color/colorYellow</item>
+        <item name="colorPrimaryDark">@color/colorYellow</item>
+        <item name="colorAccent">@color/colorYellow</item>
+    </style>
+
 </resources>
+
+
