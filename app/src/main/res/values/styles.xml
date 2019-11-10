@@ -16,6 +16,7 @@
         <item name="colorPrimary">@color/colorYellow</item>
         <item name="colorPrimaryDark">@color/colorYellow</item>
         <item name="colorAccent">@color/colorYellow</item>
+        <item name="android:listDivider">@color/colorGray</item>
     </style>
 
     <!-- Estilos das activities sem ActionBar -->
