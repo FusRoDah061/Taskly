@@ -7,9 +7,9 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_add_tarefa">Nova tarefa</string>
     <string name="title_activity_nova_tarefa">Nova Tarefa</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_tarefa">Tarefa</string>
+    <string name="title_sincronizar">Sincronizar</string>
+    <string name="title_concluir">Concluir</string>
 
     <string-array name="dias_array">
         <item>Hoje</item>

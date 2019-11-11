@@ -14,6 +14,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class NovaTarefaActivity extends AppCompatActivity {
 
+    private static final int TAB_TAREFA      = 0;
+    private static final int TAB_SINCRONIZAR = 1;
+    private static final int TAB_CONCLUIR    = 2;
+
+    private BottomNavigationView navView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,14 +30,17 @@ public class NovaTarefaActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
+                R.id.navigation_tarefa, R.id.navigation_sincronizar, R.id.navigation_concluir)
                 .build();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
+
+        navView.getMenu().getItem(TAB_SINCRONIZAR).setEnabled(false);
+        navView.getMenu().getItem(TAB_CONCLUIR).setEnabled(false);
     }
 
     @Override

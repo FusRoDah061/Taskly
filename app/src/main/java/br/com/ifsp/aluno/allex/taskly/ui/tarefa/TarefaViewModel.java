@@ -1,14 +1,14 @@
-package br.com.ifsp.aluno.allex.taskly.ui.home;
+package br.com.ifsp.aluno.allex.taskly.ui.tarefa;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+public class TarefaViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public HomeViewModel() {
+    public TarefaViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is home fragment");
     }

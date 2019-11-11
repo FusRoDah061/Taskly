@@ -1,4 +1,4 @@
-package br.com.ifsp.aluno.allex.taskly.ui.dashboard;
+package br.com.ifsp.aluno.allex.taskly.ui.concluir;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,17 +13,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import br.com.ifsp.aluno.allex.taskly.R;
 
-public class DashboardFragment extends Fragment {
+public class ConcluirFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+    private ConcluirViewModel concluirViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        final TextView textView = root.findViewById(R.id.text_dashboard);
-        dashboardViewModel.getText().observe(this, new Observer<String>() {
+        concluirViewModel =
+                ViewModelProviders.of(this).get(ConcluirViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_concluir, container, false);
+        final TextView textView = root.findViewById(R.id.text_notifications);
+        concluirViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
