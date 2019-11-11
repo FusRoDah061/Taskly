@@ -22,13 +22,15 @@ public class SincronizarFragment extends Fragment {
         sincronizarViewModel =
                 ViewModelProviders.of(this).get(SincronizarViewModel.class);
         View root = inflater.inflate(R.layout.fragment_sincronizar, container, false);
-        final TextView textView = root.findViewById(R.id.text_dashboard);
+
+        /*final TextView textView = root.findViewById(R.id.text_dashboard);
         sincronizarViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
             }
-        });
+        });*/
+
         return root;
     }
 }
