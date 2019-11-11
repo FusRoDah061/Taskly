@@ -14,6 +14,12 @@
     <string-array name="dias_array">
         <item>Hoje</item>
         <item>Amanhã</item>
-        <item>Selecionar…</item>
+        <item>Selecionar data…</item>
+    </string-array>
+
+    <string-array name="hora_array">
+        <item>Em 30 minutos</item>
+        <item>Em 1 hora</item>
+        <item>Selecionar horário…</item>
     </string-array>
 </resources>

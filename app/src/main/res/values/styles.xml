@@ -6,6 +6,9 @@
         <item name="android:actionMenuTextColor">@color/colorBlack</item>
         <item name="android:colorForeground">@color/colorBlack</item>
         <item name="colorControlNormal">@color/colorBlack</item>
+        <item name="editTextBackground">@drawable/round_corners_white_background</item>
+        <item name="spinnerStyle">@style/AppTheme.Spinner</item>
+        <item name="android:popupTheme">@style/AppTheme.PopupOverlay</item>
     </style>
 
     <!-- Estilos das activities com ActionBar -->
@@ -24,6 +27,7 @@
         <item name="android:colorBackground">@color/colorYellow</item>
         <item name="colorAccent">@color/colorBlack</item>
         <item name="colorPrimary">@color/colorBlack</item>
+        <item name="buttonStyle">@style/AppTheme.Fullscreen.Button</item>
     </style>
 
     <!-- Estilos da ActionBar -->
@@ -78,6 +82,15 @@
         <item name="colorPrimary">@color/colorYellow</item>
         <item name="colorPrimaryDark">@color/colorYellow</item>
         <item name="colorAccent">@color/colorYellow</item>
+    </style>
+
+    <style name="AppTheme.Spinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:background">@drawable/spinner_background</item>
+    </style>
+
+    <style name="AppTheme.Fullscreen.Button" parent="Widget.AppCompat.Button">
+        <item name="android:backgroundTint">@color/colorWhite</item>
+        <item name="android:textColor">@color/colorYellow</item>
     </style>
 
 </resources>
