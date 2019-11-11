@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -23,6 +24,7 @@ public class TarefaFragment extends Fragment implements AdapterView.OnItemSelect
     private EditText edtDescricaoTarefa;
     private Spinner  spDiaTarefa;
     private Spinner  spHoraTarefa;
+    private Button   btnContinuar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class TarefaFragment extends Fragment implements AdapterView.OnItemSelect
         edtDescricaoTarefa = (EditText) root.findViewById(R.id.edtDescricaoTarefa);
         spDiaTarefa        = (Spinner)  root.findViewById(R.id.spDiaTarefa);
         spHoraTarefa       = (Spinner)  root.findViewById(R.id.spHoraTarefa);
+        btnContinuar       = (Button)   root.findViewById(R.id.btnContinuar);
 
         ArrayAdapter<CharSequence> adapterDia = ArrayAdapter.createFromResource(getActivity(),
                 R.array.dias_array, android.R.layout.simple_spinner_item);

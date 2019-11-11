@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:text="Descreva sua tarefa..."
+        android:text="Descreva sua tarefa ..."
         android:textSize="@dimen/text_big"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +76,7 @@
         app:layout_constraintTop_toBottomOf="@+id/spDiaTarefa" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnContinuar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CONTINUAR"
