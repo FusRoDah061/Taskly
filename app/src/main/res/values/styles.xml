@@ -70,6 +70,8 @@
         <item name="itemIconTint">@color/colorBlack</item>
     </style>
 
+    <style name="AppTheme.BottomSheet" parent="Theme.MaterialComponents.Light.BottomSheetDialog"></style>
+
     <style name="AppTheme.NavigationDrawerHeader" parent="ThemeOverlay.AppCompat.Dark">
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:colorBackgroundCacheHint">@color/colorYellow</item>
