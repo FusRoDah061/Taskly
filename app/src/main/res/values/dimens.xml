@@ -15,6 +15,6 @@
     <dimen name="text_big">30sp</dimen>
     <dimen name="text_medium">26sp</dimen>
     <dimen name="text_small">22sp</dimen>
-    <dimen name="text_list_item_primary">15sp</dimen>
+    <dimen name="text_list_item_primary">16sp</dimen>
     <dimen name="text_list_item_secondary">12sp</dimen>
 </resources>

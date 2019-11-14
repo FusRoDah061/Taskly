@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_item_size"
-    android:padding="@dimen/list_item_padding">
+    android:padding="@dimen/list_item_padding"
+    android:background="?android:attr/selectableItemBackground">
 
     <CheckBox
         android:id="@+id/cbTarefaConcluida"
@@ -20,6 +21,7 @@
         android:layout_toEndOf="@+id/cbTarefaConcluida"/>
 
     <TextView
+        android:id="@+id/tvDataTarefa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="13/11/2019 23:00"
@@ -29,6 +31,7 @@
         android:textColor="@color/colorGrayDark"/>
 
     <ImageView
+        android:id="@+id/ivContaTarefa"
         android:layout_width="@dimen/list_item_content_size"
         android:layout_height="@dimen/list_item_content_size"
         android:src="@drawable/ic_account_circle_black_24dp"

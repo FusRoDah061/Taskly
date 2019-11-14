@@ -2,33 +2,44 @@ package br.com.ifsp.aluno.allex.taskly;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.List;
+
+import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
+import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
+import br.com.ifsp.aluno.allex.taskly.repository.TarefaRepository;
+import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
     private RecyclerView rvTarefas;
     private Spinner      spDiaFiltroTarefas;
+    private List<Tarefa> tarefas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        tarefas = new TarefaRepository().findAll();
         initComponents();
     }
 
@@ -112,8 +123,27 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         rvTarefas = (RecyclerView) findViewById(R.id.rvTarefas);
+        TarefaAdapter tarefaAdapter = new TarefaAdapter(tarefas);
+
+        tarefaAdapter.setOnTarefaStatusChangedListener(new TarefaAdapter.OnTarefaStatusChangedListener() {
+            @Override
+            public void onTarefaStatusChanged(View view, int position, boolean isChecked, Tarefa tarefa) {
+                tarefa.setStatus(isChecked ? EStatusTarefa.CONCLUIDA : EStatusTarefa.PENDENTE);
+                // TODO: Realizar demais processos de conclusão ou não da tarefa
+            }
+        });
+
+        tarefaAdapter.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(MainActivity.this, "Long touch", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+        rvTarefas.setAdapter(tarefaAdapter);
+        rvTarefas.setLayoutManager(new LinearLayoutManager(this));
         // TODO: Preencher lista com tarefas criadas
-        // TODO: Criar o layout dos itens da lista
         // TODO: No longtouch dos itens, abrir a bottom sheet
 
         //Inicializa o dropdown de filtro
