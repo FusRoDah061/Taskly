@@ -8,13 +8,19 @@ public class Tarefa {
 
     private Long id;
     private String descricao;
-    private Date dia;
+    private Date data;
     private boolean sincronizada;
     private EStatusTarefa status;
 
-    public Tarefa(String descricao, Date dia, boolean sincronizada) {
+    public Tarefa() {
+        this.descricao = null;
+        this.data = new Date();
+        this.sincronizada = false;
+    }
+
+    public Tarefa(String descricao, Date data, boolean sincronizada) {
         this.descricao = descricao;
-        this.dia = dia;
+        this.data = data;
         this.sincronizada = sincronizada;
     }
 
@@ -30,12 +36,12 @@ public class Tarefa {
         this.descricao = descricao;
     }
 
-    public Date getDia() {
-        return dia;
+    public Date getData() {
+        return data;
     }
 
-    public void setDia(Date dia) {
-        this.dia = dia;
+    public void setData(Date data) {
+        this.data = data;
     }
 
     public boolean isSincronizada() {

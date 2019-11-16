@@ -1,4 +1,4 @@
-package br.com.ifsp.aluno.allex.taskly.ui.concluir;
+package br.com.ifsp.aluno.allex.taskly.views.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,15 +7,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import br.com.ifsp.aluno.allex.taskly.R;
+import br.com.ifsp.aluno.allex.taskly.viewmodels.ConcluirViewModel;
 
 public class ConcluirFragment extends Fragment {
 

@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_tarefa"
-        android:name="br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaFragment"
+        android:name="br.com.ifsp.aluno.allex.taskly.views.fragment.TarefaFragment"
         android:label="@string/title_tarefa"
         tools:layout="@layout/fragment_tarefa" />
 
     <fragment
         android:id="@+id/navigation_sincronizar"
-        android:name="br.com.ifsp.aluno.allex.taskly.ui.sincronizar.SincronizarFragment"
+        android:name="br.com.ifsp.aluno.allex.taskly.views.fragment.SincronizarFragment"
         android:label="@string/title_sincronizar"
         tools:layout="@layout/fragment_sincronizar"/>
 
     <fragment
         android:id="@+id/navigation_concluir"
-        android:name="br.com.ifsp.aluno.allex.taskly.ui.concluir.ConcluirFragment"
+        android:name="br.com.ifsp.aluno.allex.taskly.views.fragment.ConcluirFragment"
         android:label="@string/title_concluir"
         tools:layout="@layout/fragment_concluir" />
 </navigation>

@@ -1,4 +1,4 @@
-package br.com.ifsp.aluno.allex.taskly;
+package br.com.ifsp.aluno.allex.taskly.views;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -11,6 +11,9 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import br.com.ifsp.aluno.allex.taskly.R;
+import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
+
 public class NovaTarefaActivity extends AppCompatActivity {
 
     private static final int TAB_TAREFA      = 0;
@@ -18,6 +21,8 @@ public class NovaTarefaActivity extends AppCompatActivity {
     private static final int TAB_CONCLUIR    = 2;
 
     private BottomNavigationView navView;
+
+    private final Tarefa tarefa = new Tarefa();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,4 +47,9 @@ public class NovaTarefaActivity extends AppCompatActivity {
     {
         return super.onOptionsItemSelected(item);
     }
+
+    public Tarefa getTarefa() {
+        return tarefa;
+    }
+
 }

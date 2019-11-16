@@ -20,7 +20,7 @@ import br.com.ifsp.aluno.allex.taskly.R;
 import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 
-public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.ViewHolder> {
+public class TarefaRecyclerViewAdapter extends RecyclerView.Adapter<TarefaRecyclerViewAdapter.ViewHolder> {
 
     private OnTarefaStatusChangedListener onTarefaStatusChangedListener;
     private View.OnLongClickListener onLongClickListener;
@@ -78,7 +78,7 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.ViewHolder
 
     private List<Tarefa> tarefas;
 
-    public TarefaAdapter(List<Tarefa> tarefas) {
+    public TarefaRecyclerViewAdapter(List<Tarefa> tarefas) {
         this.tarefas = tarefas;
     }
 
@@ -101,7 +101,7 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.ViewHolder
         holder.cbTarefaConcluida.setChecked(EStatusTarefa.CONCLUIDA.equals(tarefa.getStatus()));
 
         holder.tvDescricaoTarefa.setText(tarefa.getDescricao());
-        holder.tvDataTarefa.setText(sdf.format(tarefa.getDia()));
+        holder.tvDataTarefa.setText(sdf.format(tarefa.getData()));
 
         if(tarefa.isSincronizada()){
             //TODO: Exibir foto da conta google sincronizada

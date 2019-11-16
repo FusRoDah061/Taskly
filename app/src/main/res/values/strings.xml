@@ -10,6 +10,7 @@
     <string name="title_tarefa">Tarefa</string>
     <string name="title_sincronizar">Sincronizar</string>
     <string name="title_concluir">Concluir</string>
+    <string name="date_hint">DD/MM/AAAA HH:MM:SS</string>
 
     <string-array name="dias_array">
         <item>Hoje</item>

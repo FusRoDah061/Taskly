@@ -1,4 +1,4 @@
-package br.com.ifsp.aluno.allex.taskly.ui.concluir;
+package br.com.ifsp.aluno.allex.taskly.viewmodels;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

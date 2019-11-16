@@ -1,16 +1,16 @@
-package br.com.ifsp.aluno.allex.taskly.ui.tarefa;
+package br.com.ifsp.aluno.allex.taskly.viewmodels;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class TarefaViewModel extends ViewModel {
+public class SincronizarViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public TarefaViewModel() {
+    public SincronizarViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        mText.setValue("This is dashboard fragment");
     }
 
     public LiveData<String> getText() {
