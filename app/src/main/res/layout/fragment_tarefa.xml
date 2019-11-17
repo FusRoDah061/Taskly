@@ -75,9 +75,29 @@
             android:onClick="@{() -> viewModel.onDataTarefaClicked()}"
             android:elevation="0dp"
             android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text_small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+        <Button
+            android:id="@+id/edtHoraTarefa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/spinner_padding"
+            android:paddingBottom="@dimen/spinner_padding"
+            android:hint="@string/time_hint"
+            android:textAlignment="center"
+            android:background="@drawable/round_corners_white_background"
+            android:text="@={viewModel.horaTarefa}"
+            android:onClick="@{() -> viewModel.onHoraTarefaClicked()}"
+            android:elevation="0dp"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/text_small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edtDiaTarefa" />
 
         <Button
             android:id="@+id/btnContinuar"

@@ -28,7 +28,7 @@ public class TarefaFragment extends Fragment {
         View root = bind.getRoot();
 
         Tarefa tarefa = ((NovaTarefaActivity) getActivity()).getTarefa();
-        bind.setViewModel(new TarefaViewModel(tarefa));
+        bind.setViewModel(new TarefaViewModel(tarefa, getActivity()));
         bind.executePendingBindings();
 
         return root;

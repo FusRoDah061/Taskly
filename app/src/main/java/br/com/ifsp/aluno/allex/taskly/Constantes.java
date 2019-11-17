@@ -14,7 +14,7 @@ public class Constantes {
     public final static String PARCELABLE_STATUS       = "PARCELABLE_STATUS";
 
     public final static SimpleDateFormat DATE_FORMAT   = new SimpleDateFormat("dd/MM/yyyy", new Locale("pt","BR"));
-    public final static SimpleDateFormat TIME_FORMAT   = new SimpleDateFormat("HH:mm:ss", new Locale("pt","BR"));
-    public final static SimpleDateFormat DATE_TIME_FORMAT   = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", new Locale("pt","BR"));
+    public final static SimpleDateFormat TIME_FORMAT   = new SimpleDateFormat("HH:mm", new Locale("pt","BR"));
+    public final static SimpleDateFormat DATE_TIME_FORMAT   = new SimpleDateFormat("dd/MM/yyyy HH:mm", new Locale("pt","BR"));
 
 }
