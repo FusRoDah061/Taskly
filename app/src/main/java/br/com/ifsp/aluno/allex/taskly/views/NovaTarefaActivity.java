@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -15,7 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import br.com.ifsp.aluno.allex.taskly.R;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 
-public class NovaTarefaActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemReselectedListener {
+public class NovaTarefaActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemReselectedListener, NavController.OnDestinationChangedListener {
 
     private static final int TAB_TAREFA      = 0;
     private static final int TAB_SINCRONIZAR = 1;
@@ -39,6 +41,8 @@ public class NovaTarefaActivity extends AppCompatActivity implements BottomNavig
                 .build();
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController.addOnDestinationChangedListener(this);
+
         NavigationUI.setupWithNavController(navView, navController);
 
         navView.getMenu().getItem(TAB_SINCRONIZAR).setEnabled(false);
@@ -64,4 +68,28 @@ public class NovaTarefaActivity extends AppCompatActivity implements BottomNavig
 
     @Override
     public void onNavigationItemReselected(@NonNull MenuItem menuItem) {}
+
+    @Override
+    public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+
+        switch (destination.getId()){
+            case R.id.navigation_tarefa:
+                navView.getMenu().getItem(TAB_TAREFA).setEnabled(true);
+                navView.getMenu().getItem(TAB_SINCRONIZAR).setEnabled(false);
+                navView.getMenu().getItem(TAB_CONCLUIR).setEnabled(false);
+                break;
+
+            case R.id.navigation_sincronizar:
+                navView.getMenu().getItem(TAB_TAREFA).setEnabled(false);
+                navView.getMenu().getItem(TAB_SINCRONIZAR).setEnabled(true);
+                navView.getMenu().getItem(TAB_CONCLUIR).setEnabled(false);
+                break;
+
+            case R.id.navigation_concluir:
+                navView.getMenu().getItem(TAB_TAREFA).setEnabled(false);
+                navView.getMenu().getItem(TAB_SINCRONIZAR).setEnabled(false);
+                navView.getMenu().getItem(TAB_CONCLUIR).setEnabled(true);
+                break;
+        }
+    }
 }

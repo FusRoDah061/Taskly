@@ -12,10 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
+import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.R;
 import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
@@ -96,12 +95,11 @@ public class TarefaRecyclerViewAdapter extends RecyclerView.Adapter<TarefaRecycl
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Tarefa tarefa = tarefas.get(position);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
 
         holder.cbTarefaConcluida.setChecked(EStatusTarefa.CONCLUIDA.equals(tarefa.getStatus()));
 
         holder.tvDescricaoTarefa.setText(tarefa.getDescricao());
-        holder.tvDataTarefa.setText(sdf.format(tarefa.getData()));
+        holder.tvDataTarefa.setText(Constantes.DATE_TIME_FORMAT.format(tarefa.getData()));
 
         if(tarefa.isSincronizada()){
             //TODO: Exibir foto da conta google sincronizada
