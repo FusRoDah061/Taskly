@@ -10,6 +10,7 @@ import android.widget.TimePicker;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
+import androidx.lifecycle.MutableLiveData;
 
 import java.text.ParseException;
 import java.util.Calendar;
@@ -19,6 +20,8 @@ import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 
 public class TarefaViewModel extends BaseObservable {
+
+    private MutableLiveData<Event<Boolean>> nextFragmentEvent = new MutableLiveData<>();
 
     private Tarefa tarefa;
     private Context context;
@@ -128,6 +131,7 @@ public class TarefaViewModel extends BaseObservable {
                 tarefa.setData((Constantes.DATE_TIME_FORMAT.parse(String.format("%s %s", dataTarefa, horaTarefa))));
 
                 //TODO: Ir para o próximo fragment
+                nextFragmentEvent.postValue(new Event<Boolean>(true));
             } catch (ParseException e) {
                 setToastMessage("O formato da data ou hora é inválido.");
                 e.printStackTrace();
@@ -135,7 +139,11 @@ public class TarefaViewModel extends BaseObservable {
         }
     }
 
-    public boolean isInputDataValid() {
+    public MutableLiveData onNextFragmentEvent(){
+        return nextFragmentEvent;
+    }
+
+    private boolean isInputDataValid() {
         if(TextUtils.isEmpty(tarefa.getDescricao())){
             setToastMessage("A descrição da tarefa não pode ser vazia.");
             return false;
