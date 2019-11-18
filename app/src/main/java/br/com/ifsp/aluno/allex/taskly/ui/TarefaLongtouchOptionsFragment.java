@@ -10,16 +10,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import br.com.ifsp.aluno.allex.taskly.R;
+import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 
 public class TarefaLongtouchOptionsFragment extends BottomSheetDialogFragment {
 
-    static TarefaLongtouchOptionsFragment newInstance() {
-        return new TarefaLongtouchOptionsFragment();
-    }
-
-    @Override public int getTheme() {
-        return  R.style.Theme_MaterialComponents_Light_BottomSheetDialog;
-    }
+    private Tarefa tarefa;
 
     @Nullable
     @Override public View onCreateView(
@@ -27,6 +22,12 @@ public class TarefaLongtouchOptionsFragment extends BottomSheetDialogFragment {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState
     ) {
+        Bundle args = getArguments();
+
+        if(args != null) {
+            Tarefa tarefa = (Tarefa) args.getSerializable("TAREFA");
+        }
+
         return inflater.inflate(R.layout.fragment_tarefa_longtouch_options_content, container, false);
     }
 

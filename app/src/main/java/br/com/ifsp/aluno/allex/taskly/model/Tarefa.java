@@ -1,10 +1,11 @@
 package br.com.ifsp.aluno.allex.taskly.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
 
-public class Tarefa {
+public class Tarefa implements Serializable {
 
     private Long id;
     private String descricao;

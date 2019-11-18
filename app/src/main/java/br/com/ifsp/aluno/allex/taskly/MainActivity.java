@@ -18,6 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -26,6 +27,7 @@ import java.util.List;
 import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 import br.com.ifsp.aluno.allex.taskly.repository.TarefaRepository;
+import br.com.ifsp.aluno.allex.taskly.ui.TarefaLongtouchOptionsFragment;
 import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaAdapter;
 
 public class MainActivity extends AppCompatActivity
@@ -133,11 +135,16 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        tarefaAdapter.setOnLongClickListener(new View.OnLongClickListener() {
+        tarefaAdapter.setOnLongClickListener(new TarefaAdapter.OnTarefaLongClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                Toast.makeText(MainActivity.this, "Long touch", Toast.LENGTH_SHORT).show();
-                return true;
+            public void onTarefaLongClicked(View view, int position, Tarefa tarefa) {
+                TarefaLongtouchOptionsFragment bottomSheetFragment = new TarefaLongtouchOptionsFragment();
+                Bundle args = new Bundle(1);
+
+                args.putSerializable("TAREFA", tarefa);
+                bottomSheetFragment.setArguments(args);
+
+                bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
             }
         });
 
