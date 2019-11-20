@@ -89,7 +89,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_tarefa) {
             abrirNovaTarefaActivity();
         } else if (id == R.id.nav_sobre) {
-
+            Intent intent = new Intent(this, SobreActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
