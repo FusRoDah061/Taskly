@@ -13,6 +13,8 @@ public class Tarefa implements Serializable {
     private boolean sincronizada;
     private EStatusTarefa status;
 
+    //TODO: Adicionar campo para a conta google
+
     public Tarefa() {
         this.descricao = null;
         this.data = new Date();

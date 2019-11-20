@@ -17,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.R;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
+import br.com.ifsp.aluno.allex.taskly.Globals;
 
 public class NovaTarefaActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemReselectedListener, NavController.OnDestinationChangedListener {
 
@@ -27,7 +28,7 @@ public class NovaTarefaActivity extends AppCompatActivity implements BottomNavig
     private BottomNavigationView navView;
     private NavController navController;
 
-    private Tarefa tarefa;
+    private Tarefa tarefa = new Tarefa();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +36,13 @@ public class NovaTarefaActivity extends AppCompatActivity implements BottomNavig
         setContentView(R.layout.activity_nova_tarefa);
 
         Bundle extras = getIntent().getExtras();
-        tarefa = (Tarefa) extras.getSerializable(Constantes.EXTRA_TAREFA);
 
-        if(tarefa == null)
-            tarefa = new Tarefa();
+        if (extras != null) {
+            tarefa = (Tarefa) extras.getSerializable(Constantes.EXTRA_TAREFA);
+
+            if (tarefa == null)
+                tarefa = new Tarefa();
+        }
 
         navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemReselectedListener(this);
@@ -64,7 +68,14 @@ public class NovaTarefaActivity extends AppCompatActivity implements BottomNavig
         int proximo = 0;
 
         if(navView.getSelectedItemId() == R.id.navigation_tarefa){
-            proximo = R.id.navigation_sincronizar;
+            Globals globals = Globals.getInstance();
+
+            if(globals.isPerguntarSincronizar()) {
+                proximo = R.id.navigation_sincronizar;
+            }
+            else if (globals.isIndicaSincronizar()) {
+                //TODO: Obter a conta google padrão
+            }
         }
         else if(navView.getSelectedItemId() == R.id.navigation_sincronizar){
             proximo = R.id.navigation_concluir;

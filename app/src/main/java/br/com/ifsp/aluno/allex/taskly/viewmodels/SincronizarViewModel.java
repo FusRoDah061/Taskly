@@ -2,18 +2,24 @@ package br.com.ifsp.aluno.allex.taskly.viewmodels;
 
 import android.content.Context;
 
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
+import br.com.ifsp.aluno.allex.taskly.Globals;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 
-public class SincronizarViewModel extends ViewModel {
+public class SincronizarViewModel extends BaseObservable {
 
     private MutableLiveData<Event<Boolean>> nextFragmentEvent = new MutableLiveData<>();
 
+    private Globals globals = Globals.getInstance();
+
     private Tarefa tarefa;
     private Context context;
+
+    private boolean naoPerguntarNovamente = false;
 
     public SincronizarViewModel(Tarefa tarefa, FragmentActivity activity) {
         this.tarefa = tarefa;
@@ -25,11 +31,35 @@ public class SincronizarViewModel extends ViewModel {
     }
 
     public void onSimClicked(){
-        nextFragmentEvent.postValue(new Event<Boolean>(true));
+        //TODO: Perguntar conta google
+
+        if(naoPerguntarNovamente) {
+            globals.setPerguntarSincronizar(false);
+            globals.setIndicaSincronizar(true);
+
+            //TODO: Salvar conta google padrão
+        }
     }
 
     public void onNaoClicked() {
+        if(naoPerguntarNovamente) {
+            globals.setPerguntarSincronizar(false);
+            globals.setIndicaSincronizar(false);
+        }
+
+        proximoFragment();
+    }
+
+    private void proximoFragment() {
         nextFragmentEvent.postValue(new Event<Boolean>(true));
     }
 
+    @Bindable
+    public boolean getNaoPerguntarNovamente() {
+        return naoPerguntarNovamente;
+    }
+
+    public void setNaoPerguntarNovamente(boolean naoPerguntarNovamente) {
+        this.naoPerguntarNovamente = naoPerguntarNovamente;
+    }
 }
