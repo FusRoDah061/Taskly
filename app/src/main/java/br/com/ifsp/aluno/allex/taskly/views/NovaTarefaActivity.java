@@ -14,6 +14,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.R;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 
@@ -26,12 +27,18 @@ public class NovaTarefaActivity extends AppCompatActivity implements BottomNavig
     private BottomNavigationView navView;
     private NavController navController;
 
-    private final Tarefa tarefa = new Tarefa();
+    private Tarefa tarefa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nova_tarefa);
+
+        Bundle extras = getIntent().getExtras();
+        tarefa = (Tarefa) extras.getSerializable(Constantes.EXTRA_TAREFA);
+
+        if(tarefa == null)
+            tarefa = new Tarefa();
 
         navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemReselectedListener(this);

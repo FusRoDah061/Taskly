@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity
     private Spinner      spDiaFiltroTarefas;
     private List<Tarefa> tarefas;
 
+    private TarefaRecyclerViewAdapter tarefaRecyclerViewAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_add_tarefa) {
-            abrirNovaTarefaActivity();
+            abrirNovaTarefaActivity(null);
             return true;
         }
 
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_google) {
 
         } else if (id == R.id.nav_tarefa) {
-            abrirNovaTarefaActivity();
+            abrirNovaTarefaActivity(null);
         } else if (id == R.id.nav_sobre) {
             Intent intent = new Intent(this, SobreActivity.class);
             startActivity(intent);
@@ -114,7 +116,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                abrirNovaTarefaActivity();
+                abrirNovaTarefaActivity(null);
             }
         });
 
@@ -128,22 +130,26 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         rvTarefas = (RecyclerView) findViewById(R.id.rvTarefas);
-        TarefaRecyclerViewAdapter tarefaRecyclerViewAdapter = new TarefaRecyclerViewAdapter(tarefas);
+        tarefaRecyclerViewAdapter = new TarefaRecyclerViewAdapter(tarefas);
         tarefaRecyclerViewAdapter.setOnTarefaStatusChangedListener(this);
         tarefaRecyclerViewAdapter.setOnLongClickListener(this);
 
         rvTarefas.setAdapter(tarefaRecyclerViewAdapter);
         rvTarefas.setLayoutManager(new LinearLayoutManager(this));
         // TODO: Preencher lista com tarefas criadas
-        // TODO: No longtouch dos itens, abrir a bottom sheet
 
         spDiaFiltroTarefas = (Spinner) findViewById(R.id.spDiaFiltroTarefas);
         spDiaFiltroTarefas.setAdapter(tarefaViewHelper.getDiasSpinnerAdapter(this));
         spDiaFiltroTarefas.setOnItemSelectedListener(this);
     }
 
-    private void abrirNovaTarefaActivity() {
+    private void abrirNovaTarefaActivity(Tarefa tarefa) {
         Intent intent = new Intent(this, NovaTarefaActivity.class);
+
+        if(tarefa != null){
+            intent.putExtra(Constantes.EXTRA_TAREFA, tarefa);
+        }
+
         startActivity(intent);
     }
 
@@ -168,13 +174,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onEditarTarefa(Tarefa tarefa) {
-        //TODO: abrir activity para editar tarefa
-        Toast.makeText(MainActivity.this, "Editar tarefa " + tarefa.getDescricao(), Toast.LENGTH_LONG).show();
+        abrirNovaTarefaActivity(tarefa);
     }
 
     @Override
     public void onExcluirTarefa(Tarefa tarefa) {
-        //TODO: Excluir a tarefa
+        if(tarefas.remove(tarefa))
+            tarefaRecyclerViewAdapter.notifyDataSetChanged();
+        //TODO: Realizar demais processos de exclusão da tarefa
+
         Toast.makeText(MainActivity.this, "Excluir tarefa " + tarefa.getDescricao(), Toast.LENGTH_LONG).show();
     }
 }
