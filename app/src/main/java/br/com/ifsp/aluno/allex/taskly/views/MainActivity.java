@@ -25,14 +25,17 @@ import java.util.List;
 import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.R;
 import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
+import br.com.ifsp.aluno.allex.taskly.events.OnTarefaActionListener;
+import br.com.ifsp.aluno.allex.taskly.events.OnTarefaLongClickListener;
+import br.com.ifsp.aluno.allex.taskly.events.OnTarefaStatusChangedListener;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 import br.com.ifsp.aluno.allex.taskly.repository.TarefaRepository;
+import br.com.ifsp.aluno.allex.taskly.ui.TarefaLongtouchOptionsFragment;
 import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaRecyclerViewAdapter;
 import br.com.ifsp.aluno.allex.taskly.viewhelper.TarefaViewHelper;
-import br.com.ifsp.aluno.allex.taskly.ui.TarefaLongtouchOptionsFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener, OnTarefaStatusChangedListener, OnTarefaLongClickListener, OnTarefaActionListener {
 
     private final TarefaViewHelper tarefaViewHelper = new TarefaViewHelper();
 
@@ -103,11 +106,9 @@ public class MainActivity extends AppCompatActivity
     public void onNothingSelected(AdapterView<?> parent) { }
 
     private void initComponents() {
-        // Define a toolbar padrão
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Inicializa a ação o FAB
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAddTarefa);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,59 +117,25 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        //Cria o menu lateral
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        //Define o listener da lista do menu lateral
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         rvTarefas = (RecyclerView) findViewById(R.id.rvTarefas);
         TarefaRecyclerViewAdapter tarefaRecyclerViewAdapter = new TarefaRecyclerViewAdapter(tarefas);
-
-        tarefaRecyclerViewAdapter.setOnTarefaStatusChangedListener(new TarefaRecyclerViewAdapter.OnTarefaStatusChangedListener() {
-            @Override
-            public void onTarefaStatusChanged(View view, int position, boolean isChecked, Tarefa tarefa) {
-                tarefa.setStatus(isChecked ? EStatusTarefa.CONCLUIDA : EStatusTarefa.PENDENTE);
-                // TODO: Realizar demais processos de conclusão ou não da tarefa
-            }
-        });
-
-        tarefaRecyclerViewAdapter.setOnLongClickListener(new TarefaRecyclerViewAdapter.OnTarefaLongClickListener() {
-            @Override
-            public void onTarefaLongClicked(View view, int position, Tarefa tarefa) {
-                TarefaLongtouchOptionsFragment bottomSheetFragment = new TarefaLongtouchOptionsFragment();
-                Bundle args = new Bundle(1);
-
-                args.putSerializable(Constantes.EXTRA_TAREFA, tarefa);
-                bottomSheetFragment.setArguments(args);
-
-                bottomSheetFragment.setOnTarefaActionListener(new TarefaLongtouchOptionsFragment.OnTarefaActionListener() {
-                    @Override
-                    public void onEditarTarefa(Tarefa tarefa) {
-                        Toast.makeText(MainActivity.this, "Editar tarefa " + tarefa.getDescricao(), Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onExcluirTarefa(Tarefa tarefa) {
-                        Toast.makeText(MainActivity.this, "Excluir tarefa " + tarefa.getDescricao(), Toast.LENGTH_LONG).show();
-                    }
-                });
-
-                bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
-            }
-        });
+        tarefaRecyclerViewAdapter.setOnTarefaStatusChangedListener(this);
+        tarefaRecyclerViewAdapter.setOnLongClickListener(this);
 
         rvTarefas.setAdapter(tarefaRecyclerViewAdapter);
         rvTarefas.setLayoutManager(new LinearLayoutManager(this));
         // TODO: Preencher lista com tarefas criadas
         // TODO: No longtouch dos itens, abrir a bottom sheet
 
-        //Inicializa o dropdown de filtro
         spDiaFiltroTarefas = (Spinner) findViewById(R.id.spDiaFiltroTarefas);
         spDiaFiltroTarefas.setAdapter(tarefaViewHelper.getDiasSpinnerAdapter(this));
         spDiaFiltroTarefas.setOnItemSelectedListener(this);
@@ -177,5 +144,36 @@ public class MainActivity extends AppCompatActivity
     private void abrirNovaTarefaActivity() {
         Intent intent = new Intent(this, NovaTarefaActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onTarefaStatusChanged(View view, int position, boolean isChecked, Tarefa tarefa) {
+        tarefa.setStatus(isChecked ? EStatusTarefa.CONCLUIDA : EStatusTarefa.PENDENTE);
+        // TODO: Realizar demais processos de conclusão ou não da tarefa
+    }
+
+    @Override
+    public void onTarefaLongClicked(View view, int position, Tarefa tarefa) {
+        TarefaLongtouchOptionsFragment bottomSheetFragment = new TarefaLongtouchOptionsFragment();
+        Bundle args = new Bundle(1);
+
+        args.putSerializable(Constantes.EXTRA_TAREFA, tarefa);
+        bottomSheetFragment.setArguments(args);
+
+        bottomSheetFragment.setOnTarefaActionListener(this);
+
+        bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+    }
+
+    @Override
+    public void onEditarTarefa(Tarefa tarefa) {
+        //TODO: abrir activity para editar tarefa
+        Toast.makeText(MainActivity.this, "Editar tarefa " + tarefa.getDescricao(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onExcluirTarefa(Tarefa tarefa) {
+        //TODO: Excluir a tarefa
+        Toast.makeText(MainActivity.this, "Excluir tarefa " + tarefa.getDescricao(), Toast.LENGTH_LONG).show();
     }
 }
