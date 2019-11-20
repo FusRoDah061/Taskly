@@ -22,18 +22,22 @@ import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 public class TarefaRecyclerViewAdapter extends RecyclerView.Adapter<TarefaRecyclerViewAdapter.ViewHolder> {
 
     private OnTarefaStatusChangedListener onTarefaStatusChangedListener;
-    private View.OnLongClickListener onLongClickListener;
+    private OnTarefaLongClickListener onTarefaLongClickListener;
 
     public interface OnTarefaStatusChangedListener {
         void onTarefaStatusChanged(View view, int position, boolean isChecked, Tarefa tarefa);
+    }
+
+    public interface OnTarefaLongClickListener {
+        void onTarefaLongClicked(View view, int position, Tarefa tarefa);
     }
 
     public void setOnTarefaStatusChangedListener(OnTarefaStatusChangedListener onTarefaStatusChangedListener) {
         this.onTarefaStatusChangedListener = onTarefaStatusChangedListener;
     }
 
-    public void setOnLongClickListener(View.OnLongClickListener onLongClickListener) {
-        this.onLongClickListener = onLongClickListener;
+    public void setOnLongClickListener(OnTarefaLongClickListener onLongClickListener) {
+        this.onTarefaLongClickListener = onLongClickListener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -66,8 +70,14 @@ public class TarefaRecyclerViewAdapter extends RecyclerView.Adapter<TarefaRecycl
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    if(onLongClickListener != null)
-                        return onLongClickListener.onLongClick(v);
+                    if(onTarefaLongClickListener != null) {
+                        int position = getAdapterPosition();
+
+                        if (position != RecyclerView.NO_POSITION) {
+                            onTarefaLongClickListener.onTarefaLongClicked(v, position, tarefas.get(position));
+                            return true;
+                        }
+                    }
 
                     return false;
                 }

@@ -28,6 +28,8 @@ import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 import br.com.ifsp.aluno.allex.taskly.repository.TarefaRepository;
 import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaRecyclerViewAdapter;
 import br.com.ifsp.aluno.allex.taskly.viewhelper.TarefaViewHelper;
+import br.com.ifsp.aluno.allex.taskly.ui.TarefaLongtouchOptionsFragment;
+import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
@@ -136,11 +138,28 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        tarefaRecyclerViewAdapter.setOnLongClickListener(new View.OnLongClickListener() {
+        tarefaRecyclerViewAdapter.setOnLongClickListener(new TarefaRecyclerViewAdapter.OnTarefaLongClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                Toast.makeText(MainActivity.this, "Long touch", Toast.LENGTH_SHORT).show();
-                return true;
+            public void onTarefaLongClicked(View view, int position, Tarefa tarefa) {
+                TarefaLongtouchOptionsFragment bottomSheetFragment = new TarefaLongtouchOptionsFragment();
+                Bundle args = new Bundle(1);
+
+                args.putSerializable("TAREFA", tarefa);
+                bottomSheetFragment.setArguments(args);
+
+                bottomSheetFragment.setOnTarefaActionListener(new TarefaLongtouchOptionsFragment.OnTarefaActionListener() {
+                    @Override
+                    public void onEditarTarefa(Tarefa tarefa) {
+                        Toast.makeText(MainActivity.this, "Editar tarefa " + tarefa.getDescricao(), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onExcluirTarefa(Tarefa tarefa) {
+                        Toast.makeText(MainActivity.this, "Excluir tarefa " + tarefa.getDescricao(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
             }
         });
 
