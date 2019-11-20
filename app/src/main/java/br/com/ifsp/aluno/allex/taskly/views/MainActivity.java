@@ -22,6 +22,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
+import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.R;
 import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
@@ -29,7 +30,6 @@ import br.com.ifsp.aluno.allex.taskly.repository.TarefaRepository;
 import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaRecyclerViewAdapter;
 import br.com.ifsp.aluno.allex.taskly.viewhelper.TarefaViewHelper;
 import br.com.ifsp.aluno.allex.taskly.ui.TarefaLongtouchOptionsFragment;
-import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity
                 TarefaLongtouchOptionsFragment bottomSheetFragment = new TarefaLongtouchOptionsFragment();
                 Bundle args = new Bundle(1);
 
-                args.putSerializable("TAREFA", tarefa);
+                args.putSerializable(Constantes.EXTRA_TAREFA, tarefa);
                 bottomSheetFragment.setArguments(args);
 
                 bottomSheetFragment.setOnTarefaActionListener(new TarefaLongtouchOptionsFragment.OnTarefaActionListener() {

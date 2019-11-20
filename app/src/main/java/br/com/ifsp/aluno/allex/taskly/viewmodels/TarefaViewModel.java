@@ -130,7 +130,6 @@ public class TarefaViewModel extends BaseObservable {
             try {
                 tarefa.setData((Constantes.DATE_TIME_FORMAT.parse(String.format("%s %s", dataTarefa, horaTarefa))));
 
-                //TODO: Ir para o próximo fragment
                 nextFragmentEvent.postValue(new Event<Boolean>(true));
             } catch (ParseException e) {
                 setToastMessage("O formato da data ou hora é inválido.");

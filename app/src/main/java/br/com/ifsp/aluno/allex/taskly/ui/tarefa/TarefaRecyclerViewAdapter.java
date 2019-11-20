@@ -17,73 +17,14 @@ import java.util.List;
 import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.R;
 import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
+import br.com.ifsp.aluno.allex.taskly.events.OnTarefaLongClickListener;
+import br.com.ifsp.aluno.allex.taskly.events.OnTarefaStatusChangedListener;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 
 public class TarefaRecyclerViewAdapter extends RecyclerView.Adapter<TarefaRecyclerViewAdapter.ViewHolder> {
 
     private OnTarefaStatusChangedListener onTarefaStatusChangedListener;
     private OnTarefaLongClickListener onTarefaLongClickListener;
-
-    public interface OnTarefaStatusChangedListener {
-        void onTarefaStatusChanged(View view, int position, boolean isChecked, Tarefa tarefa);
-    }
-
-    public interface OnTarefaLongClickListener {
-        void onTarefaLongClicked(View view, int position, Tarefa tarefa);
-    }
-
-    public void setOnTarefaStatusChangedListener(OnTarefaStatusChangedListener onTarefaStatusChangedListener) {
-        this.onTarefaStatusChangedListener = onTarefaStatusChangedListener;
-    }
-
-    public void setOnLongClickListener(OnTarefaLongClickListener onLongClickListener) {
-        this.onTarefaLongClickListener = onLongClickListener;
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
-        public CheckBox cbTarefaConcluida;
-        public TextView tvDescricaoTarefa;
-        public TextView tvDataTarefa;
-        public ImageView ivContaTarefa;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-
-            cbTarefaConcluida = (CheckBox) itemView.findViewById(R.id.cbTarefaConcluida);
-            tvDescricaoTarefa = (TextView) itemView.findViewById(R.id.tvDescricaoTarefa);
-            tvDataTarefa = (TextView) itemView.findViewById(R.id.tvDataTarefa);
-            ivContaTarefa = (ImageView) itemView.findViewById(R.id.ivContaTarefa);
-
-            cbTarefaConcluida.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(onTarefaStatusChangedListener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            onTarefaStatusChangedListener.onTarefaStatusChanged(buttonView, position, isChecked, tarefas.get(position));
-                        }
-                    }
-                }
-            });
-
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if(onTarefaLongClickListener != null) {
-                        int position = getAdapterPosition();
-
-                        if (position != RecyclerView.NO_POSITION) {
-                            onTarefaLongClickListener.onTarefaLongClicked(v, position, tarefas.get(position));
-                            return true;
-                        }
-                    }
-
-                    return false;
-                }
-            });
-        }
-    }
 
     private List<Tarefa> tarefas;
 
@@ -121,4 +62,56 @@ public class TarefaRecyclerViewAdapter extends RecyclerView.Adapter<TarefaRecycl
         return tarefas.size();
     }
 
+    public void setOnTarefaStatusChangedListener(OnTarefaStatusChangedListener onTarefaStatusChangedListener) {
+        this.onTarefaStatusChangedListener = onTarefaStatusChangedListener;
+    }
+
+    public void setOnLongClickListener(OnTarefaLongClickListener onLongClickListener) {
+        this.onTarefaLongClickListener = onLongClickListener;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements CompoundButton.OnCheckedChangeListener, View.OnLongClickListener {
+
+        public CheckBox cbTarefaConcluida;
+        public TextView tvDescricaoTarefa;
+        public TextView tvDataTarefa;
+        public ImageView ivContaTarefa;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            cbTarefaConcluida = (CheckBox) itemView.findViewById(R.id.cbTarefaConcluida);
+            tvDescricaoTarefa = (TextView) itemView.findViewById(R.id.tvDescricaoTarefa);
+            tvDataTarefa = (TextView) itemView.findViewById(R.id.tvDataTarefa);
+            ivContaTarefa = (ImageView) itemView.findViewById(R.id.ivContaTarefa);
+
+            cbTarefaConcluida.setOnCheckedChangeListener(this);
+
+            itemView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if(onTarefaStatusChangedListener != null) {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    onTarefaStatusChangedListener.onTarefaStatusChanged(buttonView, position, isChecked, tarefas.get(position));
+                }
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if(onTarefaLongClickListener != null) {
+                int position = getAdapterPosition();
+
+                if (position != RecyclerView.NO_POSITION) {
+                    onTarefaLongClickListener.onTarefaLongClicked(v, position, tarefas.get(position));
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
 }

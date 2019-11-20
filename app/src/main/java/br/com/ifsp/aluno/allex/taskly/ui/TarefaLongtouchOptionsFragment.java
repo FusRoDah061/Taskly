@@ -12,7 +12,9 @@ import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.navigation.NavigationView;
 
+import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.R;
+import br.com.ifsp.aluno.allex.taskly.events.OnTarefaActionListener;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 
 public class TarefaLongtouchOptionsFragment extends BottomSheetDialogFragment implements NavigationView.OnNavigationItemSelectedListener {
@@ -31,7 +33,7 @@ public class TarefaLongtouchOptionsFragment extends BottomSheetDialogFragment im
         Bundle args = getArguments();
 
         if(args != null) {
-            tarefa = (Tarefa) args.getSerializable("TAREFA");
+            tarefa = (Tarefa) args.getSerializable(Constantes.EXTRA_TAREFA);
         }
 
         NavigationView navigationView = (NavigationView) root.findViewById (R.id.nav_options);
@@ -52,7 +54,6 @@ public class TarefaLongtouchOptionsFragment extends BottomSheetDialogFragment im
         } else if (id == R.id.option_excluir) {
             if(onTarefaActionListener != null)
                 onTarefaActionListener.onExcluirTarefa(tarefa);
-
         }
 
         dismiss();
@@ -64,8 +65,4 @@ public class TarefaLongtouchOptionsFragment extends BottomSheetDialogFragment im
         this.onTarefaActionListener = onTarefaActionListener;
     }
 
-    public interface OnTarefaActionListener {
-        void onEditarTarefa(Tarefa tarefa);
-        void onExcluirTarefa(Tarefa tarefa);
-    }
 }
