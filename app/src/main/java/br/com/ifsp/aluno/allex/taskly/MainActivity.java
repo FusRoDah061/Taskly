@@ -18,7 +18,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -143,6 +142,18 @@ public class MainActivity extends AppCompatActivity
 
                 args.putSerializable("TAREFA", tarefa);
                 bottomSheetFragment.setArguments(args);
+
+                bottomSheetFragment.setOnTarefaActionListener(new TarefaLongtouchOptionsFragment.OnTarefaActionListener() {
+                    @Override
+                    public void onEditarTarefa(Tarefa tarefa) {
+                        Toast.makeText(MainActivity.this, "Editar tarefa " + tarefa.getDescricao(), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onExcluirTarefa(Tarefa tarefa) {
+                        Toast.makeText(MainActivity.this, "Excluir tarefa " + tarefa.getDescricao(), Toast.LENGTH_LONG).show();
+                    }
+                });
 
                 bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
             }
