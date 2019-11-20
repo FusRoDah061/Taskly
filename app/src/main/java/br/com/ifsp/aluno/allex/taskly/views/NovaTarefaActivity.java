@@ -70,10 +70,13 @@ public class NovaTarefaActivity extends AppCompatActivity implements BottomNavig
         if(navView.getSelectedItemId() == R.id.navigation_tarefa){
             Globals globals = Globals.getInstance();
 
-            if(globals.isPerguntarSincronizar()) {
+            if(globals.isPerguntarSincronizar())
                 proximo = R.id.navigation_sincronizar;
-            }
-            else if (globals.isIndicaSincronizar()) {
+            else
+                proximo = R.id.navigation_concluir;
+
+            if (globals.isIndicaSincronizar()) {
+                tarefa.setSincronizada(true);
                 //TODO: Obter a conta google padrão
             }
         }

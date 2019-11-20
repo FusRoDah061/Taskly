@@ -11,4 +11,15 @@ public interface Constantes {
     SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm", new Locale("pt","BR"));
     SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm", new Locale("pt","BR"));
 
+    Integer DATABASE_VERSION = 1;
+    String DATABASE_NAME = "tarefas.db";
+
+    String TABLE_TAREFA = "tarefa";
+
+    String COLUMN_TAREFA_ID = "id";
+    String COLUMN_TAREFA_DESCRICAO = "descricao";
+    String COLUMN_TAREFA_DATA = "data";
+    String COLUMN_TAREFA_SINCRONIZADA = "sincronizada";
+    String COLUMN_TAREFA_STATUS = "status";
+
 }

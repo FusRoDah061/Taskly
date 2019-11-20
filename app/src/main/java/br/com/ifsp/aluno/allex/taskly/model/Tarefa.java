@@ -16,19 +16,19 @@ public class Tarefa implements Serializable {
     //TODO: Adicionar campo para a conta google
 
     public Tarefa() {
+        this.id = null;
         this.descricao = null;
         this.data = new Date();
         this.sincronizada = false;
-    }
-
-    public Tarefa(String descricao, Date data, boolean sincronizada) {
-        this.descricao = descricao;
-        this.data = data;
-        this.sincronizada = sincronizada;
+        this.status = EStatusTarefa.PENDENTE;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDescricao() {

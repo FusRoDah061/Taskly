@@ -4,12 +4,11 @@ import android.content.Context;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
 
 import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
-import br.com.ifsp.aluno.allex.taskly.repository.TarefaRepository;
+import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
 
 public class ConcluirViewModel extends BaseObservable {
 
@@ -18,7 +17,7 @@ public class ConcluirViewModel extends BaseObservable {
     private Tarefa tarefa;
     private Context context;
 
-    public ConcluirViewModel(Tarefa tarefa, FragmentActivity activity) {
+    public ConcluirViewModel(Tarefa tarefa, Context context) {
         this.tarefa = tarefa;
         this.context = context;
     }
@@ -51,11 +50,13 @@ public class ConcluirViewModel extends BaseObservable {
     }
 
     public void onLegalClicked() {
-        new TarefaRepository().save(tarefa);
+        new TarefaRepository(context).save(tarefa);
 
         if(tarefa.isSincronizada()){
             //TODO: Sincronizar tarefa
         }
+
+        //TODO: Registrar notificação
 
         nextFragmentEvent.postValue(new Event<Boolean>(true));
     }

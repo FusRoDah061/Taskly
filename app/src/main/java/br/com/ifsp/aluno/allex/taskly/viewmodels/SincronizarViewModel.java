@@ -4,7 +4,6 @@ import android.content.Context;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
 
 import br.com.ifsp.aluno.allex.taskly.Globals;
@@ -21,7 +20,7 @@ public class SincronizarViewModel extends BaseObservable {
 
     private boolean naoPerguntarNovamente = false;
 
-    public SincronizarViewModel(Tarefa tarefa, FragmentActivity activity) {
+    public SincronizarViewModel(Tarefa tarefa, Context context) {
         this.tarefa = tarefa;
         this.context = context;
     }

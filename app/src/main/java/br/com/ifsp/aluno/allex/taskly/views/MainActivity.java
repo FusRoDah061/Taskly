@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ifsp.aluno.allex.taskly.Constantes;
@@ -29,7 +29,7 @@ import br.com.ifsp.aluno.allex.taskly.events.OnTarefaActionListener;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaLongClickListener;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaStatusChangedListener;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
-import br.com.ifsp.aluno.allex.taskly.repository.TarefaRepository;
+import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
 import br.com.ifsp.aluno.allex.taskly.ui.TarefaLongtouchOptionsFragment;
 import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaRecyclerViewAdapter;
 import br.com.ifsp.aluno.allex.taskly.viewhelper.TarefaViewHelper;
@@ -38,10 +38,11 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener, OnTarefaStatusChangedListener, OnTarefaLongClickListener, OnTarefaActionListener {
 
     private final TarefaViewHelper tarefaViewHelper = new TarefaViewHelper();
+    private final TarefaRepository tarefaRepository = new TarefaRepository(this);
 
     private RecyclerView rvTarefas;
     private Spinner      spDiaFiltroTarefas;
-    private List<Tarefa> tarefas;
+    private List<Tarefa> tarefas = new ArrayList<>();
 
     private TarefaRecyclerViewAdapter tarefaRecyclerViewAdapter;
 
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tarefas = new TarefaRepository().findAll();
+        tarefas.addAll(tarefaRepository.findAll());
         initComponents();
     }
 
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
 
         tarefas.clear();
-        tarefas.addAll(new TarefaRepository().findAll());
+        tarefas.addAll(tarefaRepository.findAll());
         tarefaRecyclerViewAdapter.notifyDataSetChanged();
     }
 
@@ -145,7 +146,6 @@ public class MainActivity extends AppCompatActivity
 
         rvTarefas.setAdapter(tarefaRecyclerViewAdapter);
         rvTarefas.setLayoutManager(new LinearLayoutManager(this));
-        // TODO: Preencher lista com tarefas criadas
 
         spDiaFiltroTarefas = (Spinner) findViewById(R.id.spDiaFiltroTarefas);
         spDiaFiltroTarefas.setAdapter(tarefaViewHelper.getDiasSpinnerAdapter(this));
@@ -165,7 +165,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onTarefaStatusChanged(View view, int position, boolean isChecked, Tarefa tarefa) {
         tarefa.setStatus(isChecked ? EStatusTarefa.CONCLUIDA : EStatusTarefa.PENDENTE);
-        // TODO: Realizar demais processos de conclusão ou não da tarefa
+        tarefaRepository.save(tarefa);
+        // TODO: Desativar notificação
+        // TODO: Atualizar no google
     }
 
     @Override
@@ -188,10 +190,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onExcluirTarefa(Tarefa tarefa) {
-        if(tarefas.remove(tarefa))
-            tarefaRecyclerViewAdapter.notifyDataSetChanged();
-        //TODO: Realizar demais processos de exclusão da tarefa
 
-        Toast.makeText(MainActivity.this, "Excluir tarefa " + tarefa.getDescricao(), Toast.LENGTH_LONG).show();
+        if(tarefaRepository.delete(tarefa)) {
+
+            if(tarefa.isSincronizada()) {
+                //TODO: Remover do google
+            }
+
+            if (tarefas.remove(tarefa))
+                tarefaRecyclerViewAdapter.notifyDataSetChanged();
+        }
     }
 }
