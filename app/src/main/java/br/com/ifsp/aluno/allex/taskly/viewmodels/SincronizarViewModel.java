@@ -39,6 +39,9 @@ public class SincronizarViewModel extends BaseObservable {
 
             //TODO: Salvar conta google padrão
         }
+
+        tarefa.setSincronizada(true);
+        proximoFragment();
     }
 
     public void onNaoClicked() {
@@ -47,6 +50,7 @@ public class SincronizarViewModel extends BaseObservable {
             globals.setIndicaSincronizar(false);
         }
 
+        tarefa.setSincronizada(false);
         proximoFragment();
     }
 

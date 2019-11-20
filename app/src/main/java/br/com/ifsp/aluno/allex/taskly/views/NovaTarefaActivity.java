@@ -80,6 +80,10 @@ public class NovaTarefaActivity extends AppCompatActivity implements BottomNavig
         else if(navView.getSelectedItemId() == R.id.navigation_sincronizar){
             proximo = R.id.navigation_concluir;
         }
+        else if(navView.getSelectedItemId() == R.id.navigation_concluir) {
+            finish();
+            return;
+        }
 
         navController.navigate(proximo);
     }

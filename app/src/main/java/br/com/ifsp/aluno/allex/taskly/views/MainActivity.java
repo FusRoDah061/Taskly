@@ -54,6 +54,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        tarefas.clear();
+        tarefas.addAll(new TarefaRepository().findAll());
+        tarefaRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
