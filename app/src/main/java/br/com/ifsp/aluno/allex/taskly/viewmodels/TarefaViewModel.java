@@ -7,10 +7,8 @@ import android.text.TextUtils;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
-import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
-import androidx.lifecycle.MutableLiveData;
 
 import java.text.ParseException;
 import java.util.Calendar;
@@ -19,12 +17,7 @@ import java.util.GregorianCalendar;
 import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 
-public class TarefaViewModel extends BaseObservable {
-
-    private MutableLiveData<Event<Boolean>> nextFragmentEvent = new MutableLiveData<>();
-
-    private Tarefa tarefa;
-    private Context context;
+public class TarefaViewModel extends BaseViewModel {
 
     private String dataTarefa;
     private String horaTarefa;
@@ -33,8 +26,7 @@ public class TarefaViewModel extends BaseObservable {
     private String toastMessage = null;
 
     public TarefaViewModel(Tarefa tarefa, Context context) {
-        this.tarefa = tarefa;
-        this.context = context;
+        super(tarefa, context);
 
         dataTarefa = Constantes.DATE_FORMAT.format(tarefa.getData());
         horaTarefa = Constantes.TIME_FORMAT.format(tarefa.getData());
@@ -130,16 +122,12 @@ public class TarefaViewModel extends BaseObservable {
             try {
                 tarefa.setData((Constantes.DATE_TIME_FORMAT.parse(String.format("%s %s", dataTarefa, horaTarefa))));
 
-                nextFragmentEvent.postValue(new Event<Boolean>(true));
+                goToNextFragment();
             } catch (ParseException e) {
                 setToastMessage("O formato da data ou hora é inválido.");
                 e.printStackTrace();
             }
         }
-    }
-
-    public MutableLiveData onNextFragmentEvent(){
-        return nextFragmentEvent;
     }
 
     private boolean isInputDataValid() {

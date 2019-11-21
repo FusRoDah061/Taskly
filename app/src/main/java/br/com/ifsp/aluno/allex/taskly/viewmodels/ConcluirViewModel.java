@@ -2,28 +2,16 @@ package br.com.ifsp.aluno.allex.taskly.viewmodels;
 
 import android.content.Context;
 
-import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.lifecycle.MutableLiveData;
 
 import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
 
-public class ConcluirViewModel extends BaseObservable {
-
-    private MutableLiveData<Event<Boolean>> nextFragmentEvent = new MutableLiveData<>();
-
-    private Tarefa tarefa;
-    private Context context;
+public class ConcluirViewModel extends BaseViewModel {
 
     public ConcluirViewModel(Tarefa tarefa, Context context) {
-        this.tarefa = tarefa;
-        this.context = context;
-    }
-
-    public MutableLiveData onNextFragmentEvent(){
-        return nextFragmentEvent;
+        super(tarefa, context);
     }
 
     @Bindable
@@ -58,7 +46,7 @@ public class ConcluirViewModel extends BaseObservable {
 
         //TODO: Registrar notificação
 
-        nextFragmentEvent.postValue(new Event<Boolean>(true));
+        goToNextFragment();
     }
 
 }

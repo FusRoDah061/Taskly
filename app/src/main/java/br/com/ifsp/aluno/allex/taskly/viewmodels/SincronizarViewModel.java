@@ -2,31 +2,19 @@ package br.com.ifsp.aluno.allex.taskly.viewmodels;
 
 import android.content.Context;
 
-import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.lifecycle.MutableLiveData;
 
 import br.com.ifsp.aluno.allex.taskly.Globals;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 
-public class SincronizarViewModel extends BaseObservable {
-
-    private MutableLiveData<Event<Boolean>> nextFragmentEvent = new MutableLiveData<>();
+public class SincronizarViewModel extends BaseViewModel {
 
     private Globals globals = Globals.getInstance();
-
-    private Tarefa tarefa;
-    private Context context;
 
     private boolean naoPerguntarNovamente = false;
 
     public SincronizarViewModel(Tarefa tarefa, Context context) {
-        this.tarefa = tarefa;
-        this.context = context;
-    }
-
-    public MutableLiveData onNextFragmentEvent(){
-        return nextFragmentEvent;
+        super(tarefa, context);
     }
 
     public void onSimClicked(){
@@ -40,7 +28,7 @@ public class SincronizarViewModel extends BaseObservable {
         }
 
         tarefa.setSincronizada(true);
-        proximoFragment();
+        goToNextFragment();
     }
 
     public void onNaoClicked() {
@@ -50,11 +38,7 @@ public class SincronizarViewModel extends BaseObservable {
         }
 
         tarefa.setSincronizada(false);
-        proximoFragment();
-    }
-
-    private void proximoFragment() {
-        nextFragmentEvent.postValue(new Event<Boolean>(true));
+        goToNextFragment();
     }
 
     @Bindable
