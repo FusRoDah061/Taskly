@@ -11,17 +11,12 @@
     <string name="title_sincronizar">Sincronizar</string>
     <string name="title_concluir">Concluir</string>
     <string name="date_hint">DD/MM/AAAA</string>
-    <string name="time_hint">HH:MM:SS</string>
+    <string name="time_hint">HH:MM</string>
 
     <string-array name="dias_array">
         <item>Hoje</item>
         <item>Amanhã</item>
-        <item>Selecionar data…</item>
-    </string-array>
-
-    <string-array name="hora_array">
-        <item>Em 30 minutos</item>
-        <item>Em 1 hora</item>
-        <item>Selecionar horário…</item>
+        <item>Próximos 7 dias</item>
+        <item>Próximos 30 dias</item>
     </string-array>
 </resources>

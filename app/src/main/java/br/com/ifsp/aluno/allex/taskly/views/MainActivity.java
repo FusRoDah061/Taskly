@@ -57,10 +57,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-
-        tarefas.clear();
-        tarefas.addAll(tarefaRepository.findAll());
-        tarefaRecyclerViewAdapter.notifyDataSetChanged();
+        buscarTarefas(spDiaFiltroTarefas.getSelectedItemPosition());
     }
 
     @Override
@@ -112,7 +109,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // TODO: Filtrar tarefas pela dia. Se for a opção "Selecionar...", abrir um datepicker
+        buscarTarefas(position);
     }
 
     @Override
@@ -209,5 +206,27 @@ public class MainActivity extends AppCompatActivity
             if (tarefas.remove(tarefa))
                 tarefaRecyclerViewAdapter.notifyDataSetChanged();
         }
+    }
+
+    private void buscarTarefas(int positionFiltro) {
+        int qtdDias = Constantes.DIAS_HOJE;
+
+        switch (positionFiltro) {
+            case 1:
+                qtdDias = Constantes.DIAS_AMANHA;
+                break;
+
+            case 2:
+                qtdDias = Constantes.DIAS_SEMANA;
+                break;
+
+            case 3:
+                qtdDias = Constantes.DIAS_MES;
+                break;
+        }
+
+        tarefas.clear();
+        tarefas.addAll(tarefaRepository.findForDays(qtdDias, (qtdDias == Constantes.DIAS_AMANHA)));
+        tarefaRecyclerViewAdapter.notifyDataSetChanged();
     }
 }

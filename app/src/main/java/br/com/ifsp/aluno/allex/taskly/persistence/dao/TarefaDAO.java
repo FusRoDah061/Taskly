@@ -29,7 +29,7 @@ public class TarefaDAO {
 
         db = helper.getWritableDatabase();
 
-        String sql = String.format("select * from %s %s", Constantes.TABLE_TAREFA, (where != null ? where : ""));
+        String sql = String.format("select * from %s %s", Constantes.TABLE_TAREFA, (where != null ? " where " + where : ""));
         //TODO: join com conta google
 
         Cursor cursor = db.rawQuery(sql, null);
@@ -44,7 +44,7 @@ public class TarefaDAO {
                 tarefa.setStatus(EStatusTarefa.valueOf(cursor.getString(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_STATUS))));
 
                 try {
-                    tarefa.setData(Constantes.DATE_TIME_FORMAT.parse(cursor.getString(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_DATA))));
+                    tarefa.setData(Constantes.SQLITE_DATE_TIME_FORMAT.parse(cursor.getString(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_DATA))));
                 } catch (ParseException e) { e.printStackTrace(); }
 
                 //TODO: preencher conta google
@@ -64,7 +64,7 @@ public class TarefaDAO {
 
         ContentValues values = new ContentValues();
         values.put(Constantes.COLUMN_TAREFA_DESCRICAO, tarefa.getDescricao());
-        values.put(Constantes.COLUMN_TAREFA_DATA, Constantes.DATE_TIME_FORMAT.format(tarefa.getData()));
+        values.put(Constantes.COLUMN_TAREFA_DATA, Constantes.SQLITE_DATE_TIME_FORMAT.format(tarefa.getData()));
         values.put(Constantes.COLUMN_TAREFA_SINCRONIZADA, tarefa.isSincronizada() ? 1 : 0);
         values.put(Constantes.COLUMN_TAREFA_STATUS, tarefa.getStatus().toString());
 
@@ -105,7 +105,7 @@ public class TarefaDAO {
 
         ContentValues values = new ContentValues();
         values.put(Constantes.COLUMN_TAREFA_DESCRICAO, tarefa.getDescricao());
-        values.put(Constantes.COLUMN_TAREFA_DATA, Constantes.DATE_TIME_FORMAT.format(tarefa.getData()));
+        values.put(Constantes.COLUMN_TAREFA_DATA, Constantes.SQLITE_DATE_TIME_FORMAT.format(tarefa.getData()));
         values.put(Constantes.COLUMN_TAREFA_SINCRONIZADA, tarefa.isSincronizada() ? 1 : 0);
         values.put(Constantes.COLUMN_TAREFA_STATUS, tarefa.getStatus().toString());
 
