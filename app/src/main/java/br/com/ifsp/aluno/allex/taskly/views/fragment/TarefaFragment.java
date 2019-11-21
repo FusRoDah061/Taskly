@@ -13,13 +13,11 @@ import androidx.databinding.DataBindingUtil;
 import br.com.ifsp.aluno.allex.taskly.R;
 import br.com.ifsp.aluno.allex.taskly.databinding.FragmentTarefaBinding;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
-import br.com.ifsp.aluno.allex.taskly.viewhelper.TarefaViewHelper;
 import br.com.ifsp.aluno.allex.taskly.viewmodels.TarefaViewModel;
 import br.com.ifsp.aluno.allex.taskly.views.NovaTarefaActivity;
 
 public class TarefaFragment extends BaseFragment {
 
-    private final TarefaViewHelper tarefaViewHelper = new TarefaViewHelper();
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         FragmentTarefaBinding bind = DataBindingUtil.inflate(inflater, R.layout.fragment_tarefa, container, false);

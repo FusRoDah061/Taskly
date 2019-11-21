@@ -6,7 +6,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,12 +34,10 @@ import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
 import br.com.ifsp.aluno.allex.taskly.ui.TarefaLongtouchOptionsFragment;
 import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaRecyclerViewAdapter;
-import br.com.ifsp.aluno.allex.taskly.viewhelper.TarefaViewHelper;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener, OnTarefaStatusChangedListener, OnTarefaLongClickListener, OnTarefaActionListener {
 
-    private final TarefaViewHelper tarefaViewHelper = new TarefaViewHelper();
     private final TarefaRepository tarefaRepository = new TarefaRepository(this);
 
     private RecyclerView rvTarefas;
@@ -148,8 +148,17 @@ public class MainActivity extends AppCompatActivity
         rvTarefas.setLayoutManager(new LinearLayoutManager(this));
 
         spDiaFiltroTarefas = (Spinner) findViewById(R.id.spDiaFiltroTarefas);
-        spDiaFiltroTarefas.setAdapter(tarefaViewHelper.getDiasSpinnerAdapter(this));
+        spDiaFiltroTarefas.setAdapter(getDiasSpinnerAdapter());
         spDiaFiltroTarefas.setOnItemSelectedListener(this);
+    }
+
+    private SpinnerAdapter getDiasSpinnerAdapter() {
+        ArrayAdapter<CharSequence> adapterDia = ArrayAdapter.createFromResource(this,
+                R.array.dias_array, android.R.layout.simple_spinner_item);
+
+        adapterDia.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        return adapterDia;
     }
 
     private void abrirNovaTarefaActivity(Tarefa tarefa) {
