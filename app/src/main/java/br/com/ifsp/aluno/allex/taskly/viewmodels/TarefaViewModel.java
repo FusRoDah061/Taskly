@@ -1,5 +1,6 @@
 package br.com.ifsp.aluno.allex.taskly.viewmodels;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -25,8 +26,8 @@ public class TarefaViewModel extends BaseViewModel {
     @Bindable
     private String toastMessage = null;
 
-    public TarefaViewModel(Tarefa tarefa, Context context) {
-        super(tarefa, context);
+    public TarefaViewModel(Tarefa tarefa, Activity activity) {
+        super(tarefa, activity);
 
         dataTarefa = Constantes.DATE_FORMAT.format(tarefa.getData());
         horaTarefa = Constantes.TIME_FORMAT.format(tarefa.getData());
@@ -88,7 +89,7 @@ public class TarefaViewModel extends BaseViewModel {
             e.printStackTrace();
         }
 
-        DatePickerDialog dpd = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog dpd = new DatePickerDialog(activity, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 setDataTarefa(Constantes.DATE_FORMAT.format(new GregorianCalendar(year, month, dayOfMonth).getTime()));
@@ -107,7 +108,7 @@ public class TarefaViewModel extends BaseViewModel {
             e.printStackTrace();
         }
 
-        TimePickerDialog tpd = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+        TimePickerDialog tpd = new TimePickerDialog(activity, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hour, int minute) {
                 setHoraTarefa(Constantes.TIME_FORMAT.format(new GregorianCalendar(1900, 1, 1, hour, minute).getTime()));

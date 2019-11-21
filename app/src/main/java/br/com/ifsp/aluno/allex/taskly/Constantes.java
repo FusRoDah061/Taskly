@@ -28,4 +28,6 @@ public interface Constantes {
     int DIAS_SEMANA = 7;
     int DIAS_MES = 30;
 
+    int REQ_CODE_GOOGLE_API_UNAVAILABLE = 0;
+
 }

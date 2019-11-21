@@ -1,5 +1,6 @@
 package br.com.ifsp.aluno.allex.taskly.viewmodels;
 
+import android.app.Activity;
 import android.content.Context;
 
 import androidx.databinding.Bindable;
@@ -13,8 +14,8 @@ public class SincronizarViewModel extends BaseViewModel {
 
     private boolean naoPerguntarNovamente = false;
 
-    public SincronizarViewModel(Tarefa tarefa, Context context) {
-        super(tarefa, context);
+    public SincronizarViewModel(Tarefa tarefa, Activity activity) {
+        super(tarefa, activity);
     }
 
     public void onSimClicked(){
