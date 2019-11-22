@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <group
         android:id="@+id/group_top"
@@ -8,11 +7,11 @@
         <item
             android:id="@+id/nav_tarefa"
             android:icon="@drawable/ic_note_add_black_24dp"
-            android:title="Nova tarefa" />
+            android:title="@string/nav_tarefa" />
         <item
             android:id="@+id/nav_google"
             android:icon="@drawable/ic_account_circle_black_24dp"
-            android:title="Conectar conta Google" />
+            android:title="@string/nav_google" />
     </group>
 
 
@@ -22,7 +21,7 @@
         <item
             android:id="@+id/nav_sobre"
             android:icon="@drawable/ic_help_black_24dp"
-            android:title="Sobre" />
+            android:title="@string/nav_sobre" />
     </group>
 
 

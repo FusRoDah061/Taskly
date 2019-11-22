@@ -1,15 +1,11 @@
 package br.com.ifsp.aluno.allex.taskly.viewmodels;
 
 import android.app.Activity;
-import android.content.Context;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 
 import androidx.databinding.Bindable;
 
 import br.com.ifsp.aluno.allex.taskly.Constantes;
-import br.com.ifsp.aluno.allex.taskly.calendar.CalendarManager;
+import br.com.ifsp.aluno.allex.taskly.google.services.GoogleCalendarManager;
 import br.com.ifsp.aluno.allex.taskly.enums.ETarefaSincronizadaResult;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaSincronizadaListener;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
@@ -48,10 +44,10 @@ public class ConcluirViewModel extends BaseViewModel implements OnTarefaSincroni
         new TarefaRepository(activity).save(tarefa);
 
         if(tarefa.isSincronizada()){
-            CalendarManager calendarManager = CalendarManager.getInstance(activity);
-            calendarManager.setOnTarefaSincronizadaListener(this);
+            GoogleCalendarManager googleCalendarManager = GoogleCalendarManager.getInstance(activity);
+            googleCalendarManager.setOnTarefaSincronizadaListener(this);
 
-            calendarManager.sincronizarTarefa(tarefa);
+            googleCalendarManager.sincronizarTarefa(tarefa);
         }
         else {
             finalizarCriacaoTarefa();

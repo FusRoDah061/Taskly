@@ -13,6 +13,14 @@
     <string name="date_hint">DD/MM/AAAA</string>
     <string name="time_hint">HH:MM</string>
 
+    <string name="nav_google">Escolher conta Google padrão</string>
+    <string name="nav_tarefa">Nova tarefa</string>
+    <string name="nav_sobre">Sobre</string>
+
+    <string name="error_gplay_services_unavailable">Google Play Services indisponível. Atualização cancelada pelo usuário.</string>
+
+    <string name="str_default_account_set"> definida como conta Google padrão.</string>
+
     <string-array name="dias_array">
         <item>Hoje</item>
         <item>Amanhã</item>

@@ -29,5 +29,8 @@ public interface Constantes {
     int DIAS_MES = 30;
 
     int REQ_CODE_GOOGLE_API_UNAVAILABLE = 0;
+    int REQ_CODE_DIALOG_CONTA_GOOGLE = 1;
+
+    String PREF_CONTA_PADRAO = "PREF_CONTA_PADRAO";
 
 }

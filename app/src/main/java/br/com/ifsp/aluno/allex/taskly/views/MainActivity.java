@@ -1,6 +1,11 @@
 package br.com.ifsp.aluno.allex.taskly.views;
 
+import android.accounts.AccountManager;
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,7 +14,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -30,6 +37,8 @@ import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaActionListener;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaLongClickListener;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaStatusChangedListener;
+import br.com.ifsp.aluno.allex.taskly.google.services.GoogleAccountManager;
+import br.com.ifsp.aluno.allex.taskly.google.services.GoogleCommons;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
 import br.com.ifsp.aluno.allex.taskly.ui.TarefaLongtouchOptionsFragment;
@@ -45,12 +54,14 @@ public class MainActivity extends AppCompatActivity
     private List<Tarefa> tarefas = new ArrayList<>();
 
     private TarefaRecyclerViewAdapter tarefaRecyclerViewAdapter;
+    private GoogleAccountManager googleAccountManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tarefas.addAll(tarefaRepository.findAll());
+        googleAccountManager = new GoogleAccountManager(this);
         initComponents();
     }
 
@@ -94,6 +105,19 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_google) {
+            GoogleCommons googleCommons = new GoogleCommons();
+
+            if(googleCommons.isGooglePlayServicesAvailable(this)) {
+                googleAccountManager.showAccoutPicker();
+            }
+            else {
+                googleCommons.showGooglePlayServicesAvailabilityErrorDialog(this, googleCommons.getConnectionResult(), new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        Toast.makeText(MainActivity.this, getResources().getString(R.string.error_gplay_services_unavailable), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
 
         } else if (id == R.id.nav_tarefa) {
             abrirNovaTarefaActivity(null);
@@ -105,6 +129,32 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case Constantes.REQ_CODE_DIALOG_CONTA_GOOGLE:
+                if (resultCode == Activity.RESULT_OK && data != null && data.getExtras() != null) {
+                    String accountName = data.getExtras().getString(AccountManager.KEY_ACCOUNT_NAME);
+
+                    if (accountName != null) {
+
+                        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString(Constantes.PREF_CONTA_PADRAO, accountName);
+                        editor.apply();
+
+                        googleAccountManager.setDefaultAccountName(accountName);
+
+                        //TODO: Atualiza header no navigation drawer
+                        Toast.makeText(this, accountName + getResources().getString(R.string.str_default_account_set), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+        }
     }
 
     @Override
