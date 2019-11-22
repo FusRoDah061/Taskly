@@ -43,9 +43,9 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
-        <receiver android:name=".WakefulReceiver"/>
+        <receiver android:name=".notifications.TarefaNotificationReceiver"/>
 
-        <receiver android:name=".BootReceiver"
+        <receiver android:name=".notifications.BootReceiver"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

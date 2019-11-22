@@ -9,6 +9,7 @@ import br.com.ifsp.aluno.allex.taskly.google.services.GoogleCalendarManager;
 import br.com.ifsp.aluno.allex.taskly.enums.ETarefaSincronizadaResult;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaSincronizadaListener;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
+import br.com.ifsp.aluno.allex.taskly.notifications.TarefaNotificationReceiver;
 import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
 
 public class ConcluirViewModel extends BaseViewModel implements OnTarefaSincronizadaListener {
@@ -56,6 +57,8 @@ public class ConcluirViewModel extends BaseViewModel implements OnTarefaSincroni
 
     private void finalizarCriacaoTarefa() {
         //TODO: Registrar notificação
+        TarefaNotificationReceiver tarefaNotificationReceiver = new TarefaNotificationReceiver();
+        tarefaNotificationReceiver.scheduleNotification(activity, tarefa);
 
         goToNextFragment();
     }

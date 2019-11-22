@@ -40,6 +40,7 @@ import br.com.ifsp.aluno.allex.taskly.events.OnTarefaStatusChangedListener;
 import br.com.ifsp.aluno.allex.taskly.google.services.GoogleAccountManager;
 import br.com.ifsp.aluno.allex.taskly.google.services.GoogleCommons;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
+import br.com.ifsp.aluno.allex.taskly.notifications.TarefaNotificationReceiver;
 import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
 import br.com.ifsp.aluno.allex.taskly.ui.TarefaLongtouchOptionsFragment;
 import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaRecyclerViewAdapter;
@@ -220,9 +221,18 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onTarefaStatusChanged(View view, int position, boolean isChecked, Tarefa tarefa) {
-        tarefa.setStatus(isChecked ? EStatusTarefa.CONCLUIDA : EStatusTarefa.PENDENTE);
+        TarefaNotificationReceiver tarefaNotificationReceiver = new TarefaNotificationReceiver();
+
+        if(isChecked) {
+            tarefa.setStatus(EStatusTarefa.CONCLUIDA);
+            tarefaNotificationReceiver.cancelNotification(this, tarefa);
+        }
+        else {
+            tarefa.setStatus(EStatusTarefa.PENDENTE);
+            tarefaNotificationReceiver.scheduleNotification(this, tarefa);
+        }
+
         tarefaRepository.save(tarefa);
-        // TODO: Desativar notificação
         // TODO: Atualizar no google
     }
 
@@ -251,6 +261,10 @@ public class MainActivity extends AppCompatActivity
 
             if(tarefa.isSincronizada()) {
                 //TODO: Remover do google
+                //TODO: Cancelar notificação
+                TarefaNotificationReceiver tarefaNotificationReceiver = new TarefaNotificationReceiver();
+                tarefaNotificationReceiver.cancelNotification(this, tarefa);
+
             }
 
             if (tarefas.remove(tarefa))

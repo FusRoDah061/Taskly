@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class BootReceiver extends BroadcastReceiver {
+    //Referência: https://stackoverflow.com/questions/36902667/how-to-schedule-notification-in-android
 
     @Override
     public void onReceive(Context context, Intent intent) {

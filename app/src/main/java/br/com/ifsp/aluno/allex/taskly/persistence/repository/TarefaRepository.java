@@ -60,4 +60,16 @@ public class TarefaRepository {
 
         return dao.get(filter);
     }
+
+    public Tarefa findById(Long tarefaId) {
+        String filter = String.format("id = %d ", tarefaId);
+
+        try {
+            return dao.get(filter).get(0);
+        }
+        catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+
+    }
 }

@@ -6,71 +6,80 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
 import java.util.Calendar;
 import java.util.Date;
 
+import br.com.ifsp.aluno.allex.taskly.Constantes;
+import br.com.ifsp.aluno.allex.taskly.R;
+import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
+import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
 
 public class TarefaNotificationReceiver extends WakefulBroadcastReceiver {
-    // provides access to the system alarm services.
+
     private AlarmManager mAlarmManager;
 
     public void onReceive(Context context, Intent intent) {
-        // TODO: post notification
-        //Referência: https://stackoverflow.com/questions/36902667/how-to-schedule-notification-in-android
+        Bundle extras = intent.getExtras();
+
+        if(extras != null) {
+            long tarefaId = extras.getLong(Constantes.EXTRA_TAREFA);
+
+            if(tarefaId > 0) {
+                TarefaRepository tarefaRepository = new TarefaRepository(context);
+                Tarefa tarefa = tarefaRepository.findById(tarefaId);
+
+                if(tarefa.getStatus() == EStatusTarefa.PENDENTE) {
+
+                    NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, Constantes.NOTIFICATION_CHANNEL_ID);
+                    notificationBuilder.setSmallIcon(R.drawable.ic_event_note_black_24dp)
+                            .setContentTitle(tarefa.getDescricao())
+                            .setContentText(String.format("Tarefa agendada para as %s.", Constantes.DATE_TIME_FORMAT.format(tarefa.getData())));
+
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+                    notificationManager.notify((int) tarefaId, notificationBuilder.build());
+                }
+            }
+        }
+
         TarefaNotificationReceiver.completeWakefulIntent(intent);
     }
 
-    /**
-     * Sets the next alarm to run. When the alarm fires,
-     * the app broadcasts an Intent to this WakefulBroadcastReceiver.
-     * @param context the context of the app's Activity.
-     */
-    public void setAlarm(Context context, Tarefa tarefa) {
+    public void scheduleNotification(Context context, Tarefa tarefa) {
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, TarefaNotificationReceiver.class);
-        //TODO: requestCode = tarefa.id
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        intent.putExtra(Constantes.EXTRA_TAREFA, tarefa.getId());
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        //// TODO: use calendar.add(Calendar.SECOND,MINUTE,HOUR, int);
-        //calendar.add(Calendar.SECOND, 10);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, tarefa.getId().intValue(), intent, 0);
 
-        //ALWAYS recompute the calendar after using add, set, roll
-        Date date = calendar.getTime();
+        if(tarefa.getData().compareTo(new Date()) < 0)
+            return;
 
-        mAlarmManager.setExact(AlarmManager.RTC_WAKEUP, date.getTime(), alarmIntent);
+        if(tarefa.getStatus() == EStatusTarefa.CONCLUIDA)
+            return;
 
-        // Enable {@code BootReceiver} to automatically restart when the
-        // device is rebooted.
-        //// TODO: you may need to reference the context by ApplicationActivity.class
+        mAlarmManager.setExact(AlarmManager.RTC_WAKEUP, tarefa.getData().getTime(), alarmIntent);
+
         ComponentName receiver = new ComponentName(context, BootReceiver.class);
         PackageManager pm = context.getPackageManager();
         pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
     }
 
-    /**
-     * Cancels the next alarm from running. Removes any intents set by this
-     * WakefulBroadcastReceiver.
-     * @param context the context of the app's Activity
-     */
-    public void cancelAlarm(Context context, Tarefa tarefa) {
-        Log.d("WakefulAlarmReceiver", "{cancelAlarm}");
-
+    public void cancelNotification(Context context, Tarefa tarefa) {
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, TarefaNotificationReceiver.class);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, tarefa.getId().intValue(), intent, 0);
 
         mAlarmManager.cancel(alarmIntent);
 
-        // Disable {@code BootReceiver} so that it doesn't automatically restart when the device is rebooted.
-        //// TODO: you may need to reference the context by ApplicationActivity.class
         ComponentName receiver = new ComponentName(context, BootReceiver.class);
         PackageManager pm = context.getPackageManager();
         pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
