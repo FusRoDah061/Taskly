@@ -8,6 +8,10 @@ import android.content.Intent;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
+import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
 
 public class BootReceiver extends BroadcastReceiver {
     //Referência: https://stackoverflow.com/questions/36902667/how-to-schedule-notification-in-android
@@ -15,21 +19,13 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            intent = new Intent(context, TarefaNotificationReceiver.class);
-            PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+            TarefaNotificationReceiver tarefaNotificationReceiver = new TarefaNotificationReceiver();
+            TarefaRepository tarefaRepository = new TarefaRepository(context);
+            List<Tarefa> tarefas = tarefaRepository.findAllFromDate(new Date());
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            // TODO: use calendar.add(Calendar.SECOND,MINUTE,HOUR, int);
-            //calendar.add(Calendar.SECOND, 10);
-
-            //TODO: Buscar tarefas para setar as notificações
-
-            //ALWAYS recompute the calendar after using add, set, roll
-            Date date = calendar.getTime();
-
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, date.getTime(), alarmIntent);
+            for (Tarefa tarefa : tarefas) {
+                tarefaNotificationReceiver.scheduleNotification(context, tarefa);
+            }
         }
     }
 }

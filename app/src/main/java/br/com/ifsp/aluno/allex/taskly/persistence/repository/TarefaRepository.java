@@ -72,4 +72,10 @@ public class TarefaRepository {
         }
 
     }
+
+    public List<Tarefa> findAllFromDate(Date ref) {
+        String filter = String.format("data >= '%s'", Constantes.SQLITE_DATE_TIME_FORMAT.format(ref));
+
+        return dao.get(filter);
+    }
 }
