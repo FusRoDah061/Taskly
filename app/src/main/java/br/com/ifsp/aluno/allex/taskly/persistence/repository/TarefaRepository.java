@@ -78,4 +78,10 @@ public class TarefaRepository {
 
         return dao.get(filter);
     }
+
+    public List<Tarefa> findAllBeforeDate(Date date) {
+        String filter = String.format("data < '%s'", Constantes.SQLITE_DATE_TIME_FORMAT.format(date));
+
+        return dao.get(filter);
+    }
 }

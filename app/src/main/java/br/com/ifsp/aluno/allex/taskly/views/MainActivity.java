@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,8 +28,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import br.com.ifsp.aluno.allex.taskly.Constantes;
@@ -63,6 +67,42 @@ public class MainActivity extends AppCompatActivity
         tarefas.addAll(tarefaRepository.findAll());
         googleAccountManager = new GoogleAccountManager(this);
         initComponents();
+
+        removeTarefasAntigas();
+    }
+
+    private void removeTarefasAntigas() {
+        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainActivityRoot);
+        final Snackbar snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#FFC614\">Removendo tarefas passadas...</font>", Html.FROM_HTML_MODE_LEGACY), Snackbar.LENGTH_INDEFINITE);
+        snackbar.show();
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                TarefaRepository tarefaRepository = new TarefaRepository(MainActivity.this);
+
+                List<Tarefa> tarefasPassadas = tarefaRepository.findAllBeforeDate(new Date());
+
+                for(Tarefa tarefa : tarefasPassadas) {
+                    tarefaRepository.delete(tarefa);
+                }
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        snackbar.dismiss();
+                    }
+                });
+            }
+        };
+
+        new Thread(runnable).start();
     }
 
     @Override
