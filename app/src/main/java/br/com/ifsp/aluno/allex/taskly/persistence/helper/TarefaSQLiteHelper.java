@@ -43,7 +43,10 @@ public class TarefaSQLiteHelper extends SQLiteOpenHelper {
                      "  descricao varchar(100) not null," +
                      "  data varchar(15) not null," +
                      "  sincronizada integer not null default 0," +
-                     "  status varchar(10) not null default 'PENDENTE');";
+                     "  status varchar(10) not null default 'PENDENTE'," +
+                     "  google_account varchar(255)," +
+                     "  google_calendar_id varchar(255)," +
+                     "  google_calendar_task_id varchar(255));";
 
         db.execSQL(sql);
     }

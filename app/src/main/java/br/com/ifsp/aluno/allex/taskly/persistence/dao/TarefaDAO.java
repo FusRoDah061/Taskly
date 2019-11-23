@@ -43,11 +43,15 @@ public class TarefaDAO {
                 tarefa.setSincronizada(cursor.getInt(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_SINCRONIZADA)) == 1);
                 tarefa.setStatus(EStatusTarefa.valueOf(cursor.getString(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_STATUS))));
 
+                if(tarefa.isSincronizada()) {
+                    tarefa.setGoogleAccount(cursor.getString(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_GOOGLE_ACCOUNT)));
+                    tarefa.setGoogleCalendarId(cursor.getString(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_GOOGLE_CALENDAR_ID)));
+                    tarefa.setGoogleCalendarTaskId(cursor.getString(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_GOOGLE_CALENDAR_TASK_ID)));
+                }
+
                 try {
                     tarefa.setData(Constantes.SQLITE_DATE_TIME_FORMAT.parse(cursor.getString(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_DATA))));
                 } catch (ParseException e) { e.printStackTrace(); }
-
-                //TODO: preencher conta google
 
                 tarefas.add(tarefa);
             } while (cursor.moveToNext());
@@ -74,7 +78,9 @@ public class TarefaDAO {
             tarefa.setId(id);
 
             if (tarefa.isSincronizada()) {
-                //TODO: Gravar conta google
+                values.put(Constantes.COLUMN_TAREFA_GOOGLE_ACCOUNT, tarefa.getGoogleAccount());
+                values.put(Constantes.COLUMN_TAREFA_GOOGLE_CALENDAR_ID, tarefa.getGoogleCalendarId());
+                values.put(Constantes.COLUMN_TAREFA_GOOGLE_CALENDAR_TASK_ID, tarefa.getGoogleCalendarTaskId());
             }
 
             db.setTransactionSuccessful();
@@ -112,7 +118,9 @@ public class TarefaDAO {
         db.update(Constantes.TABLE_TAREFA, values, "id = ?", new String[] { String.valueOf(tarefa.getId()) });
 
         if (tarefa.isSincronizada()) {
-            //TODO: Atualizar conta google
+            values.put(Constantes.COLUMN_TAREFA_GOOGLE_ACCOUNT, tarefa.getGoogleAccount());
+            values.put(Constantes.COLUMN_TAREFA_GOOGLE_CALENDAR_ID, tarefa.getGoogleCalendarId());
+            values.put(Constantes.COLUMN_TAREFA_GOOGLE_CALENDAR_TASK_ID, tarefa.getGoogleCalendarTaskId());
         }
 
         db.close();

@@ -12,8 +12,9 @@ public class Tarefa implements Serializable {
     private Date data;
     private boolean sincronizada;
     private EStatusTarefa status;
-
-    //TODO: Adicionar campo para a conta google
+    private String googleAccount;
+    private String googleCalendarId;
+    private String googleCalendarTaskId;
 
     public Tarefa() {
         this.id = null;
@@ -21,6 +22,9 @@ public class Tarefa implements Serializable {
         this.data = new Date();
         this.sincronizada = false;
         this.status = EStatusTarefa.PENDENTE;
+        this.googleAccount = null;
+        this.googleCalendarId = null;
+        this.googleCalendarTaskId = null;
     }
 
     public Long getId() {
@@ -61,5 +65,29 @@ public class Tarefa implements Serializable {
 
     public void setStatus(EStatusTarefa status) {
         this.status = status;
+    }
+
+    public String getGoogleAccount() {
+        return googleAccount;
+    }
+
+    public void setGoogleAccount(String googleAccount) {
+        this.googleAccount = googleAccount;
+    }
+
+    public String getGoogleCalendarId() {
+        return googleCalendarId;
+    }
+
+    public void setGoogleCalendarId(String googleCalendarId) {
+        this.googleCalendarId = googleCalendarId;
+    }
+
+    public String getGoogleCalendarTaskId() {
+        return googleCalendarTaskId;
+    }
+
+    public void setGoogleCalendarTaskId(String googleCalendarTaskId) {
+        this.googleCalendarTaskId = googleCalendarTaskId;
     }
 }
