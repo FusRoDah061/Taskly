@@ -14,8 +14,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,13 +51,14 @@ import br.com.ifsp.aluno.allex.taskly.ui.TarefaLongtouchOptionsFragment;
 import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaRecyclerViewAdapter;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener, OnTarefaStatusChangedListener, OnTarefaLongClickListener, OnTarefaActionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener, OnTarefaStatusChangedListener, OnTarefaLongClickListener, OnTarefaActionListener, DrawerLayout.DrawerListener {
 
     private final TarefaRepository tarefaRepository = new TarefaRepository(this);
 
     private RecyclerView rvTarefas;
     private Spinner      spDiaFiltroTarefas;
     private List<Tarefa> tarefas = new ArrayList<>();
+    private NavigationView navigationView;
 
     private TarefaRecyclerViewAdapter tarefaRecyclerViewAdapter;
     private GoogleAccountManager googleAccountManager;
@@ -193,8 +196,8 @@ public class MainActivity extends AppCompatActivity
                         editor.apply();
 
                         googleAccountManager.setDefaultAccountName(accountName);
+                        atualizarContaGoogle();
 
-                        //TODO: Atualiza header no navigation drawer
                         Toast.makeText(this, accountName + getResources().getString(R.string.str_default_account_set), Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -223,12 +226,14 @@ public class MainActivity extends AppCompatActivity
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.addDrawerListener(this);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         rvTarefas = (RecyclerView) findViewById(R.id.rvTarefas);
@@ -278,6 +283,7 @@ public class MainActivity extends AppCompatActivity
 
         tarefaRepository.save(tarefa);
         // TODO: Atualizar no google
+        atualizarEstatisticasTarefas();
     }
 
     @Override
@@ -302,17 +308,17 @@ public class MainActivity extends AppCompatActivity
     public void onExcluirTarefa(Tarefa tarefa) {
 
         if(tarefaRepository.delete(tarefa)) {
+            TarefaNotificationReceiver tarefaNotificationReceiver = new TarefaNotificationReceiver();
+            tarefaNotificationReceiver.cancelNotification(this, tarefa);
 
             if(tarefa.isSincronizada()) {
                 //TODO: Remover do google
-                //TODO: Cancelar notificação
-                TarefaNotificationReceiver tarefaNotificationReceiver = new TarefaNotificationReceiver();
-                tarefaNotificationReceiver.cancelNotification(this, tarefa);
-
             }
 
             if (tarefas.remove(tarefa))
                 tarefaRecyclerViewAdapter.notifyDataSetChanged();
+
+            atualizarEstatisticasTarefas();
         }
     }
 
@@ -337,4 +343,51 @@ public class MainActivity extends AppCompatActivity
         tarefas.addAll(tarefaRepository.findForDays(qtdDias, (qtdDias == Constantes.DIAS_AMANHA)));
         tarefaRecyclerViewAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void onDrawerOpened(@NonNull View drawerView) {
+        atualizarEstatisticasTarefas();
+        atualizarContaGoogle();
+    }
+
+    private void atualizarContaGoogle() {
+        TextView tvContaGooglePadrao = (TextView) navigationView.findViewById(R.id.tvContaGooglePadrao);
+
+        if(tvContaGooglePadrao == null) return;
+
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        String conta = preferences.getString(Constantes.PREF_CONTA_PADRAO, null);
+
+        tvContaGooglePadrao.setText(conta != null ? conta : getResources().getString(R.string.label_conta_google_padrao_undef));
+    }
+
+    private void atualizarEstatisticasTarefas() {
+        TextView tvPctTarefasConcluidas = (TextView) navigationView.findViewById(R.id.tvPctTarefasConcluidas);
+
+        if(tvPctTarefasConcluidas == null) return;
+
+        TarefaRepository tarefaRepository = new TarefaRepository(this);
+
+        int qtdTotalTarefas = tarefaRepository.findAll().size();
+        int qtdTarefasConcluidas = tarefaRepository.findByStatus(EStatusTarefa.CONCLUIDA).size();
+        int pctConcluidas = 0;
+
+        try {
+            pctConcluidas = (qtdTarefasConcluidas * 100) / qtdTotalTarefas;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        tvPctTarefasConcluidas.setText(String.format("%d%%", pctConcluidas));
+    }
+
+    @Override
+    public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {}
+
+    @Override
+    public void onDrawerClosed(@NonNull View drawerView) {}
+
+    @Override
+    public void onDrawerStateChanged(int newState) {}
 }

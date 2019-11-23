@@ -6,7 +6,6 @@ public class Globals {
 
     private boolean perguntarSincronizar = true;
     private boolean indicaSincronizar = true;
-    // TODO: Adicionar campo para a conta google padrão
 
     private Globals() {}
 

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.ifsp.aluno.allex.taskly.Constantes;
+import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 import br.com.ifsp.aluno.allex.taskly.persistence.dao.TarefaDAO;
 
@@ -81,6 +82,12 @@ public class TarefaRepository {
 
     public List<Tarefa> findAllBeforeDate(Date date) {
         String filter = String.format("data < '%s'", Constantes.SQLITE_DATE_TIME_FORMAT.format(date));
+
+        return dao.get(filter);
+    }
+
+    public List<Tarefa> findByStatus(EStatusTarefa status) {
+        String filter = String.format("status = '%s'", status.getStatus());
 
         return dao.get(filter);
     }

@@ -14,6 +14,10 @@
     <string name="date_hint">DD/MM/AAAA</string>
     <string name="time_hint">HH:MM</string>
 
+    <string name="label_conta_google_padrao">Conta Google padrão:</string>
+    <string name="label_conta_google_padrao_undef">Não definida</string>
+    <string name="label_pct_tarefas_diarias">das tarefas de hoje concluídas!</string>
+
     <string name="nav_google">Escolher conta Google padrão</string>
     <string name="nav_tarefa">Nova tarefa</string>
     <string name="nav_sobre">Sobre</string>
