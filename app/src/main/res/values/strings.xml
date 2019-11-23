@@ -5,7 +5,8 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_add_tarefa">Nova tarefa</string>
+    <string name="action_sobre">Sobre</string>
+    <string name="action_sair">Sair</string>
     <string name="title_activity_nova_tarefa">Nova Tarefa</string>
     <string name="title_tarefa">Tarefa</string>
     <string name="title_sincronizar">Sincronizar</string>

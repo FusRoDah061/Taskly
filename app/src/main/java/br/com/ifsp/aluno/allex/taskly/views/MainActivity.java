@@ -2,7 +2,6 @@ package br.com.ifsp.aluno.allex.taskly.views;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -92,8 +91,13 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_add_tarefa) {
-            abrirNovaTarefaActivity(null);
+        if (id == R.id.action_sobre) {
+            Intent intent = new Intent(this, SobreActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        else if(id == R.id.action_sair) {
+            finish();
             return true;
         }
 
