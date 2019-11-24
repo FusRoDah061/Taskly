@@ -52,9 +52,10 @@ public class TarefaRecyclerViewAdapter extends RecyclerView.Adapter<TarefaRecycl
         holder.tvDescricaoTarefa.setText(tarefa.getDescricao());
         holder.tvDataTarefa.setText(Constantes.DATE_TIME_FORMAT.format(tarefa.getData()));
 
-        if(tarefa.isSincronizada()){
-            //TODO: Exibir foto da conta google sincronizada
-        }
+        if(tarefa.isSincronizada())
+            holder.ivTarefaSincronizada.setVisibility(View.VISIBLE);
+        else
+            holder.ivTarefaSincronizada.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class TarefaRecyclerViewAdapter extends RecyclerView.Adapter<TarefaRecycl
         public CheckBox cbTarefaConcluida;
         public TextView tvDescricaoTarefa;
         public TextView tvDataTarefa;
-        public ImageView ivContaTarefa;
+        public ImageView ivTarefaSincronizada;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -83,7 +84,7 @@ public class TarefaRecyclerViewAdapter extends RecyclerView.Adapter<TarefaRecycl
             cbTarefaConcluida = (CheckBox) itemView.findViewById(R.id.cbTarefaConcluida);
             tvDescricaoTarefa = (TextView) itemView.findViewById(R.id.tvDescricaoTarefa);
             tvDataTarefa = (TextView) itemView.findViewById(R.id.tvDataTarefa);
-            ivContaTarefa = (ImageView) itemView.findViewById(R.id.ivContaTarefa);
+            ivTarefaSincronizada = (ImageView) itemView.findViewById(R.id.ivTarefaSincronizada);
 
             cbTarefaConcluida.setOnCheckedChangeListener(this);
 
