@@ -23,8 +23,11 @@
     <string name="nav_sobre">Sobre</string>
 
     <string name="error_gplay_services_unavailable">Google Play Services indisponível. Atualização cancelada pelo usuário.</string>
+    <string name="error_account_null">A conta Google não pode ser vazia.</string>
 
-    <string name="str_default_account_set"> definida como conta Google padrão.</string>
+    <string name="str_default_account_set">\u00A0 definida como conta Google padrão.</string>
+    <string name="str_tarefa_sincronizada_aviso">Ah, e sua tarefa será sincronizada com sua agenda Google!</string>
+    <string name="str_taskly_calendar_description">Agenda criada pelo Taskly para guardar suas tarefas!</string>
 
     <string-array name="dias_array">
         <item>Hoje</item>

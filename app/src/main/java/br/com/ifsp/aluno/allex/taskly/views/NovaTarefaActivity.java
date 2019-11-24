@@ -1,11 +1,13 @@
 package br.com.ifsp.aluno.allex.taskly.views;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
@@ -15,11 +17,11 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import br.com.ifsp.aluno.allex.taskly.Constantes;
+import br.com.ifsp.aluno.allex.taskly.Globals;
 import br.com.ifsp.aluno.allex.taskly.R;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
-import br.com.ifsp.aluno.allex.taskly.Globals;
 
-public class NovaTarefaActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemReselectedListener, NavController.OnDestinationChangedListener {
+public class NovaTarefaActivity extends AsyncActivity implements BottomNavigationView.OnNavigationItemReselectedListener, NavController.OnDestinationChangedListener {
 
     private static final int TAB_TAREFA      = 0;
     private static final int TAB_SINCRONIZAR = 1;
@@ -76,8 +78,11 @@ public class NovaTarefaActivity extends AppCompatActivity implements BottomNavig
                 proximo = R.id.navigation_concluir;
 
             if (globals.isIndicaSincronizar()) {
+                SharedPreferences preferences = this.getSharedPreferences(Constantes.PREF_NAME, Context.MODE_PRIVATE);
+                String account = preferences.getString(Constantes.PREF_CONTA_PADRAO, null);
+
+                tarefa.setGoogleAccount(account);
                 tarefa.setSincronizada(true);
-                //TODO: Obter a conta google padrão
             }
         }
         else if(navView.getSelectedItemId() == R.id.navigation_sincronizar){
@@ -116,5 +121,10 @@ public class NovaTarefaActivity extends AppCompatActivity implements BottomNavig
                 navView.getMenu().getItem(TAB_CONCLUIR).setEnabled(true);
                 break;
         }
+    }
+
+    @Override
+    protected void onGooglePlayServicesCancel(DialogInterface dialog) {
+
     }
 }

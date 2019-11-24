@@ -37,6 +37,7 @@ public interface Constantes {
 
     String NOTIFICATION_CHANNEL_ID = "TASKLY_NOTIFICATION_CHANNEL_ID";
 
+    String PREF_NAME = "TASKLY_PREFS";
     String PREF_CONTA_PADRAO = "PREF_CONTA_PADRAO";
 
 }

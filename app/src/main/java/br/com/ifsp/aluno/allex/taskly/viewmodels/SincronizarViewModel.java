@@ -2,9 +2,11 @@ package br.com.ifsp.aluno.allex.taskly.viewmodels;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.databinding.Bindable;
 
+import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.Globals;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 
@@ -19,15 +21,16 @@ public class SincronizarViewModel extends BaseViewModel {
     }
 
     public void onSimClicked(){
-        //TODO: Perguntar conta google
-
         if(naoPerguntarNovamente) {
             globals.setPerguntarSincronizar(false);
             globals.setIndicaSincronizar(true);
-
-            //TODO: Salvar conta google padrão
         }
 
+        //TODO: Mostrar na tela de sincronizar a conta padrão e não deixar sincronizar se for null
+        SharedPreferences preferences = activity.getSharedPreferences(Constantes.PREF_NAME, Context.MODE_PRIVATE);
+        String account = preferences.getString(Constantes.PREF_CONTA_PADRAO, null);
+
+        tarefa.setGoogleAccount(account);
         tarefa.setSincronizada(true);
         goToNextFragment();
     }

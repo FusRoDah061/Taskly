@@ -20,7 +20,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
@@ -50,7 +49,7 @@ import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
 import br.com.ifsp.aluno.allex.taskly.ui.TarefaLongtouchOptionsFragment;
 import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaRecyclerViewAdapter;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AsyncActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener, OnTarefaStatusChangedListener, OnTarefaLongClickListener, OnTarefaActionListener, DrawerLayout.DrawerListener {
 
     private final TarefaRepository tarefaRepository = new TarefaRepository(this);
@@ -166,7 +165,6 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
             }
-
         } else if (id == R.id.nav_tarefa) {
             abrirNovaTarefaActivity(null);
         } else if (id == R.id.nav_sobre) {
@@ -190,10 +188,10 @@ public class MainActivity extends AppCompatActivity
 
                     if (accountName != null) {
 
-                        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+                        SharedPreferences prefs = getSharedPreferences(Constantes.PREF_NAME, MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putString(Constantes.PREF_CONTA_PADRAO, accountName);
-                        editor.apply();
+                        editor.commit();
 
                         googleAccountManager.setDefaultAccountName(accountName);
                         atualizarContaGoogle();
@@ -355,7 +353,7 @@ public class MainActivity extends AppCompatActivity
 
         if(tvContaGooglePadrao == null) return;
 
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Constantes.PREF_NAME, MODE_PRIVATE);
         String conta = preferences.getString(Constantes.PREF_CONTA_PADRAO, null);
 
         tvContaGooglePadrao.setText(conta != null ? conta : getResources().getString(R.string.label_conta_google_padrao_undef));
@@ -390,4 +388,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onDrawerStateChanged(int newState) {}
+
+    @Override
+    protected void onGooglePlayServicesCancel(DialogInterface dialog) {
+
+    }
 }

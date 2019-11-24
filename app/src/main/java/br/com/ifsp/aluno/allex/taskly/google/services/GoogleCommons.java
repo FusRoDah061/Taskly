@@ -2,10 +2,11 @@ package br.com.ifsp.aluno.allex.taskly.google.services;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import android.content.DialogInterface.OnCancelListener;
 
 import br.com.ifsp.aluno.allex.taskly.Constantes;
 
@@ -39,5 +40,9 @@ public class GoogleCommons {
 
     public int getConnectionResult() {
         return connectionResult;
+    }
+
+    public void showAuthorizationRequest(Activity activity, Intent intent) {
+        activity.startActivityForResult(intent, Constantes.REQ_CODE_REQUEST_AUTHORIZATION);
     }
 }

@@ -5,12 +5,14 @@ import android.app.Activity;
 import androidx.databinding.Bindable;
 
 import br.com.ifsp.aluno.allex.taskly.Constantes;
-import br.com.ifsp.aluno.allex.taskly.google.services.GoogleCalendarManager;
+import br.com.ifsp.aluno.allex.taskly.R;
 import br.com.ifsp.aluno.allex.taskly.enums.ETarefaSincronizadaResult;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaSincronizadaListener;
+import br.com.ifsp.aluno.allex.taskly.google.services.GoogleCalendarManager;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 import br.com.ifsp.aluno.allex.taskly.notifications.TarefaNotificationReceiver;
 import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
+import br.com.ifsp.aluno.allex.taskly.views.AsyncActivity;
 
 public class ConcluirViewModel extends BaseViewModel implements OnTarefaSincronizadaListener {
 
@@ -36,19 +38,17 @@ public class ConcluirViewModel extends BaseViewModel implements OnTarefaSincroni
     @Bindable
     public String getIsSincronizada() {
         if(tarefa.isSincronizada())
-            return "Ah, e sua tarefa será sincronizada com sua agenda Google!";
+            return activity.getResources().getString(R.string.str_tarefa_sincronizada_aviso);
         else
             return "";
     }
 
     public void onLegalClicked() {
-        new TarefaRepository(activity).save(tarefa);
-
         if(tarefa.isSincronizada()){
-            GoogleCalendarManager googleCalendarManager = GoogleCalendarManager.getInstance(activity);
+            GoogleCalendarManager googleCalendarManager = GoogleCalendarManager.getInstance((AsyncActivity) activity);
             googleCalendarManager.setOnTarefaSincronizadaListener(this);
 
-            googleCalendarManager.sincronizarTarefa(tarefa);
+            googleCalendarManager.criarTarefa(tarefa, tarefa.getGoogleAccount());
         }
         else {
             finalizarCriacaoTarefa();
@@ -56,7 +56,8 @@ public class ConcluirViewModel extends BaseViewModel implements OnTarefaSincroni
     }
 
     private void finalizarCriacaoTarefa() {
-        //TODO: Registrar notificação
+        new TarefaRepository(activity).save(tarefa);
+
         TarefaNotificationReceiver tarefaNotificationReceiver = new TarefaNotificationReceiver();
         tarefaNotificationReceiver.scheduleNotification(activity, tarefa);
 
@@ -70,6 +71,7 @@ public class ConcluirViewModel extends BaseViewModel implements OnTarefaSincroni
         }
         else{
             error.printStackTrace();
+            //TODO: Perguntar se quer tentar denovo
         }
     }
 }

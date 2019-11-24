@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.services.calendar.CalendarScopes;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.ifsp.aluno.allex.taskly.Constantes;
 
@@ -19,7 +19,11 @@ public class GoogleAccountManager {
     public GoogleAccountManager(Activity activity){
         this.activity = activity;
 
-        credential = GoogleAccountCredential.usingOAuth2(activity, Collections.singleton(CalendarScopes.CALENDAR));
+        List<String> scopes = new ArrayList<>(2);
+        scopes.add(GoogleCalendarScopes.CALENDAR);
+        scopes.add(GoogleCalendarScopes.EVENTS);
+
+        credential = GoogleAccountCredential.usingOAuth2(activity, scopes);
         credential.setSelectedAccountName(null);
     }
 
@@ -28,10 +32,19 @@ public class GoogleAccountManager {
     }
 
     public void setDefaultAccountName(String accountName) {
-        SharedPreferences settings = activity.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences settings = activity.getSharedPreferences(Constantes.PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(Constantes.PREF_CONTA_PADRAO, accountName);
         editor.apply();
+
+        setAccountName(accountName);
     }
 
+    public void setAccountName(String accountName) {
+        credential.setSelectedAccountName(accountName);
+    }
+
+    public GoogleAccountCredential getCredential() {
+        return credential;
+    }
 }
