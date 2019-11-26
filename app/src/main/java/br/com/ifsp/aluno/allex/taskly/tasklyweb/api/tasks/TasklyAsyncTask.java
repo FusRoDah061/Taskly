@@ -49,7 +49,7 @@ public abstract class TasklyAsyncTask<A, B> extends AsyncTask<A, Void, B> {
 
     abstract protected B doWork(A... params) throws IOException;
 
-    public void setOnAsyncTaskFinishListener(OnAsyncTaskFinishListener onAsyncTaskFinishListener) {
+    public void setOnAsyncTaskFinishListener(OnAsyncTaskFinishListener<B> onAsyncTaskFinishListener) {
         this.onAsyncTaskFinishListener = onAsyncTaskFinishListener;
     }
 }

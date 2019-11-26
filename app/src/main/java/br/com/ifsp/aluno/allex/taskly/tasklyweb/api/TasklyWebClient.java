@@ -104,6 +104,8 @@ public class TasklyWebClient {
                     tarefaDTO.setDescricao(object.getString("descricao"));
                     tarefaDTO.setProgresso(object.getInt("progresso"));
                     tarefaDTO.setCreatedAt(Constantes.DATE_TIME_FORMAT.parse(object.getString("created_at")));
+
+                    tarefas.add(tarefaDTO);
                 }
             }
 

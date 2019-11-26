@@ -74,6 +74,18 @@ public class TarefaRepository {
 
     }
 
+    public Tarefa findByTasklyId(Long tarefaId) {
+        String filter = String.format("taskly_id = %d ", tarefaId);
+
+        try {
+            return dao.get(filter).get(0);
+        }
+        catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+
+    }
+
     public List<Tarefa> findAllFromDate(Date ref) {
         String filter = String.format("data >= '%s'", Constantes.SQLITE_DATE_TIME_FORMAT.format(ref));
 

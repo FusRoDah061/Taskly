@@ -44,6 +44,7 @@ import br.com.ifsp.aluno.allex.taskly.events.OnTarefaStatusChangedListener;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 import br.com.ifsp.aluno.allex.taskly.notifications.TarefaNotificationReceiver;
 import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
+import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.TarefaDTO;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.tasks.ListarTarefasAsyncTask;
 import br.com.ifsp.aluno.allex.taskly.ui.TarefaLongtouchOptionsFragment;
 import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaRecyclerViewAdapter;
@@ -78,13 +79,13 @@ public class MainActivity extends AsyncActivity
 
     private void removeTarefasAntigas() {
         CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainActivityRoot);
-        final Snackbar snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#FFC614\">Removendo tarefas passadas...</font>", Html.FROM_HTML_MODE_LEGACY), Snackbar.LENGTH_INDEFINITE);
+        final Snackbar snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#FFC614\">Sincronizando tarefas...</font>", Html.FROM_HTML_MODE_LEGACY), Snackbar.LENGTH_INDEFINITE);
         snackbar.show();
 
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                TarefaRepository tarefaRepository = new TarefaRepository(MainActivity.this);
+                final TarefaRepository tarefaRepository = new TarefaRepository(MainActivity.this);
 
                 List<Tarefa> tarefasPassadas = tarefaRepository.findAllBeforeDate(new Date());
 
@@ -106,13 +107,27 @@ public class MainActivity extends AsyncActivity
 
                         if(conta != null) {
                             ListarTarefasAsyncTask listarTarefasAsyncTask = new ListarTarefasAsyncTask(MainActivity.this);
-                            listarTarefasAsyncTask.setOnAsyncTaskFinishListener(new OnAsyncTaskFinishListener() {
-
+                            listarTarefasAsyncTask.setOnAsyncTaskFinishListener(new OnAsyncTaskFinishListener<List<TarefaDTO>>() {
                                 @Override
-                                public void onAsyncTaskFinished(Object result, @Nullable Exception error) {
+                                public void onAsyncTaskFinished(List<TarefaDTO> result, @Nullable Exception error) {
+
+                                    for(TarefaDTO tarefaDTO : result) {
+
+                                        if(tarefaRepository.findByTasklyId(tarefaDTO.getId()) != null) continue;
+
+                                        Tarefa tarefa = new Tarefa();
+                                        tarefa.setDescricao(tarefaDTO.getDescricao());
+                                        tarefa.setData(tarefaDTO.getCreatedAt());
+                                        tarefa.setSincronizada(true);
+                                        tarefa.setTasklyTaskId(tarefaDTO.getId());
+                                        tarefa.setStatus(tarefaDTO.getProgresso() == 100 ? EStatusTarefa.CONCLUIDA : EStatusTarefa.PENDENTE);
+
+                                        tarefaRepository.save(tarefa);
+                                    }
+
+                                    buscarTarefas(spDiaFiltroTarefas.getSelectedItemPosition());
                                     snackbar.dismiss();
                                 }
-
                             });
 
                             listarTarefasAsyncTask.execute(conta);
