@@ -12,7 +12,7 @@ public abstract class AsyncActivity extends AppCompatActivity {
         return numAsyncTasks;
     }
 
-    public void newAsyncTasks() {
+    public void asyncTaskStarted() {
         this.numAsyncTasks++;
     }
 

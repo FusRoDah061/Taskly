@@ -29,13 +29,16 @@ public interface Constantes {
     int DIAS_SEMANA = 7;
     int DIAS_MES = 30;
 
-    int REQ_CODE_GOOGLE_API_UNAVAILABLE = 0;
     int REQ_CODE_DIALOG_CONTA_TASKLY = 1;
-    int REQ_CODE_REQUEST_AUTHORIZATION = 2;
 
     String NOTIFICATION_CHANNEL_ID = "TASKLY_NOTIFICATION_CHANNEL_ID";
 
     String PREF_NAME = "TASKLY_PREFS";
     String PREF_CONTA_PADRAO = "PREF_CONTA_PADRAO";
 
+    String URL_TASKLY_BASE = "http://taskly-web.herokuapp.com/";
+    String URL_ENDPOINT_TASKLY_TAREFAS = URL_TASKLY_BASE + "api/tarefas";
+    String URL_ENDPOINT_TASKLY_TAREFA = URL_TASKLY_BASE + "api/tarefa";
+
+    int HTTP_REQUEST_TIMEOUT = 15000;
 }

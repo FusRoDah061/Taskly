@@ -17,7 +17,7 @@
             android:id="@+id/textView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Deseja sincronizar a tarefa com sua agenda Google?"
+            android:text="Deseja sincronizar a tarefa com sua conta Taskly Web?"
             android:textAlignment="center"
             android:textSize="@dimen/text_big"
             android:textStyle="bold"
