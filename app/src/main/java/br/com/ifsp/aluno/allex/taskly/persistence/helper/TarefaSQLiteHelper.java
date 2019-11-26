@@ -18,19 +18,13 @@ public class TarefaSQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) { 
         createTarefasTable(db);
-        createContaGoogleTable(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         dropTarefasTable(db);
-        dropContaGoogleTable(db);
 
         this.onCreate(db);
-    }
-
-    private void dropContaGoogleTable(SQLiteDatabase db) {
-        db.execSQL("drop table if exists conta_google");
     }
 
     private void dropTarefasTable(SQLiteDatabase db) {
@@ -44,19 +38,9 @@ public class TarefaSQLiteHelper extends SQLiteOpenHelper {
                      "  data varchar(15) not null," +
                      "  sincronizada integer not null default 0," +
                      "  status varchar(10) not null default 'PENDENTE'," +
-                     "  google_account varchar(255)," +
-                     "  google_calendar_id varchar(255)," +
-                     "  google_calendar_task_id varchar(255));";
+                     "  taskly_id integer);";
 
         db.execSQL(sql);
     }
 
-    private void createContaGoogleTable(SQLiteDatabase db) {
-        String sql = "create table if not exists conta_google(" +
-                     "  id varchar(255) primary key);";
-
-        //TODO: Criar tabela de conta google
-
-        db.execSQL(sql);
-    }
 }

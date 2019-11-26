@@ -22,9 +22,7 @@ public interface Constantes {
     String COLUMN_TAREFA_DATA = "data";
     String COLUMN_TAREFA_SINCRONIZADA = "sincronizada";
     String COLUMN_TAREFA_STATUS = "status";
-    String COLUMN_TAREFA_GOOGLE_ACCOUNT = "google_account";
-    String COLUMN_TAREFA_GOOGLE_CALENDAR_ID = "google_calendar_id";
-    String COLUMN_TAREFA_GOOGLE_CALENDAR_TASK_ID = "google_calendar_task_id";
+    String COLUMN_TAREFA_TASKLY_ID= "taskly_id";
 
     int DIAS_HOJE = 0;
     int DIAS_AMANHA = 1;
@@ -32,7 +30,7 @@ public interface Constantes {
     int DIAS_MES = 30;
 
     int REQ_CODE_GOOGLE_API_UNAVAILABLE = 0;
-    int REQ_CODE_DIALOG_CONTA_GOOGLE = 1;
+    int REQ_CODE_DIALOG_CONTA_TASKLY = 1;
     int REQ_CODE_REQUEST_AUTHORIZATION = 2;
 
     String NOTIFICATION_CHANNEL_ID = "TASKLY_NOTIFICATION_CHANNEL_ID";

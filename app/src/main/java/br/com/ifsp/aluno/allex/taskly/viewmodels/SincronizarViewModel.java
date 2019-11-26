@@ -30,7 +30,10 @@ public class SincronizarViewModel extends BaseViewModel {
         SharedPreferences preferences = activity.getSharedPreferences(Constantes.PREF_NAME, Context.MODE_PRIVATE);
         String account = preferences.getString(Constantes.PREF_CONTA_PADRAO, null);
 
-        tarefa.setGoogleAccount(account);
+        if(account == null) {
+            //TODO: Se a conta padrão é null, prguntar aqui
+        }
+
         tarefa.setSincronizada(true);
         goToNextFragment();
     }

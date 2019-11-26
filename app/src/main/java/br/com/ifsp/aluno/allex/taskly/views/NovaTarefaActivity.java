@@ -78,10 +78,6 @@ public class NovaTarefaActivity extends AsyncActivity implements BottomNavigatio
                 proximo = R.id.navigation_concluir;
 
             if (globals.isIndicaSincronizar()) {
-                SharedPreferences preferences = this.getSharedPreferences(Constantes.PREF_NAME, Context.MODE_PRIVATE);
-                String account = preferences.getString(Constantes.PREF_CONTA_PADRAO, null);
-
-                tarefa.setGoogleAccount(account);
                 tarefa.setSincronizada(true);
             }
         }
@@ -123,8 +119,4 @@ public class NovaTarefaActivity extends AsyncActivity implements BottomNavigatio
         }
     }
 
-    @Override
-    protected void onGooglePlayServicesCancel(DialogInterface dialog) {
-
-    }
 }

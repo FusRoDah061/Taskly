@@ -2,7 +2,6 @@ package br.com.ifsp.aluno.allex.taskly.views;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -41,8 +40,6 @@ import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaActionListener;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaLongClickListener;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaStatusChangedListener;
-import br.com.ifsp.aluno.allex.taskly.google.services.GoogleAccountManager;
-import br.com.ifsp.aluno.allex.taskly.google.services.GoogleCommons;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 import br.com.ifsp.aluno.allex.taskly.notifications.TarefaNotificationReceiver;
 import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
@@ -60,14 +57,13 @@ public class MainActivity extends AsyncActivity
     private NavigationView navigationView;
 
     private TarefaRecyclerViewAdapter tarefaRecyclerViewAdapter;
-    private GoogleAccountManager googleAccountManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tarefas.addAll(tarefaRepository.findAll());
-        googleAccountManager = new GoogleAccountManager(this);
+
         initComponents();
 
         removeTarefasAntigas();
@@ -151,20 +147,8 @@ public class MainActivity extends AsyncActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_google) {
-            GoogleCommons googleCommons = new GoogleCommons();
-
-            if(googleCommons.isGooglePlayServicesAvailable(this)) {
-                googleAccountManager.showAccoutPicker();
-            }
-            else {
-                googleCommons.showGooglePlayServicesAvailabilityErrorDialog(this, googleCommons.getConnectionResult(), new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialogInterface) {
-                        Toast.makeText(MainActivity.this, getResources().getString(R.string.error_gplay_services_unavailable), Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
+        if (id == R.id.nav_conta) {
+            //TODO: Mostrar input para e-mail do taskly
         } else if (id == R.id.nav_tarefa) {
             abrirNovaTarefaActivity(null);
         } else if (id == R.id.nav_sobre) {
@@ -182,7 +166,7 @@ public class MainActivity extends AsyncActivity
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-            case Constantes.REQ_CODE_DIALOG_CONTA_GOOGLE:
+            case Constantes.REQ_CODE_DIALOG_CONTA_TASKLY:
                 if (resultCode == Activity.RESULT_OK && data != null && data.getExtras() != null) {
                     String accountName = data.getExtras().getString(AccountManager.KEY_ACCOUNT_NAME);
 
@@ -193,7 +177,6 @@ public class MainActivity extends AsyncActivity
                         editor.putString(Constantes.PREF_CONTA_PADRAO, accountName);
                         editor.commit();
 
-                        googleAccountManager.setDefaultAccountName(accountName);
                         atualizarContaGoogle();
 
                         Toast.makeText(this, accountName + getResources().getString(R.string.str_default_account_set), Toast.LENGTH_SHORT).show();
@@ -349,14 +332,14 @@ public class MainActivity extends AsyncActivity
     }
 
     private void atualizarContaGoogle() {
-        TextView tvContaGooglePadrao = (TextView) navigationView.findViewById(R.id.tvContaGooglePadrao);
+        TextView tvContaPadrao = (TextView) navigationView.findViewById(R.id.tvContaPadrao);
 
-        if(tvContaGooglePadrao == null) return;
+        if(tvContaPadrao == null) return;
 
         SharedPreferences preferences = getSharedPreferences(Constantes.PREF_NAME, MODE_PRIVATE);
         String conta = preferences.getString(Constantes.PREF_CONTA_PADRAO, null);
 
-        tvContaGooglePadrao.setText(conta != null ? conta : getResources().getString(R.string.label_conta_google_padrao_undef));
+        tvContaPadrao.setText(conta != null ? conta : getResources().getString(R.string.label_conta_padrao_undef));
     }
 
     private void atualizarEstatisticasTarefas() {
@@ -389,8 +372,4 @@ public class MainActivity extends AsyncActivity
     @Override
     public void onDrawerStateChanged(int newState) {}
 
-    @Override
-    protected void onGooglePlayServicesCancel(DialogInterface dialog) {
-
-    }
 }

@@ -9,9 +9,9 @@
             android:icon="@drawable/ic_note_add_black_24dp"
             android:title="@string/nav_tarefa" />
         <item
-            android:id="@+id/nav_google"
+            android:id="@+id/nav_conta"
             android:icon="@drawable/ic_account_circle_black_24dp"
-            android:title="@string/nav_google" />
+            android:title="@string/nav_conta" />
     </group>
 
 

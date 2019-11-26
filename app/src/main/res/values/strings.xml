@@ -14,20 +14,18 @@
     <string name="date_hint">DD/MM/AAAA</string>
     <string name="time_hint">HH:MM</string>
 
-    <string name="label_conta_google_padrao">Conta Google padrão:</string>
-    <string name="label_conta_google_padrao_undef">Não definida</string>
+    <string name="label_conta_padrao">Conta Taskly padrão:</string>
+    <string name="label_conta_padrao_undef">Não definida</string>
     <string name="label_pct_tarefas_diarias">das tarefas de hoje concluídas!</string>
 
-    <string name="nav_google">Escolher conta Google padrão</string>
+    <string name="nav_conta">Escolher conta Taskly padrão</string>
     <string name="nav_tarefa">Nova tarefa</string>
     <string name="nav_sobre">Sobre</string>
 
-    <string name="error_gplay_services_unavailable">Google Play Services indisponível. Atualização cancelada pelo usuário.</string>
-    <string name="error_account_null">A conta Google não pode ser vazia.</string>
+    <string name="error_account_null">A conta Taskly não pode ser vazia.</string>
 
-    <string name="str_default_account_set">\u00A0 definida como conta Google padrão.</string>
-    <string name="str_tarefa_sincronizada_aviso">Ah, e sua tarefa será sincronizada com sua agenda Google!</string>
-    <string name="str_taskly_calendar_description">Agenda criada pelo Taskly para guardar suas tarefas!</string>
+    <string name="str_default_account_set">\u00A0 definida como conta Taskly padrão.</string>
+    <string name="str_tarefa_sincronizada_aviso">Ah, e sua tarefa será sincronizada com sua lista no Taskly Web!</string>
 
     <string-array name="dias_array">
         <item>Hoje</item>
