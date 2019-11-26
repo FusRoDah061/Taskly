@@ -7,7 +7,7 @@ import java.io.IOException;
 import br.com.ifsp.aluno.allex.taskly.events.OnAsyncTaskFinishListener;
 import br.com.ifsp.aluno.allex.taskly.views.AsyncActivity;
 
-public abstract class TasklyAsyncTask extends AsyncTask<Void, Void, Boolean> {
+public abstract class TasklyAsyncTask<A, B> extends AsyncTask<A, Void, B> {
 
     protected final AsyncActivity activity;
 
@@ -25,30 +25,29 @@ public abstract class TasklyAsyncTask extends AsyncTask<Void, Void, Boolean> {
     }
 
     @Override
-    protected final Boolean doInBackground(Void... ignored) {
+    protected final B doInBackground(A... params) {
 
         try {
-            doInBackground();
-            return true;
+            return doWork(params);
         } catch (Exception e) {
             error = e;
             e.printStackTrace();
         }
 
-        return false;
+        return null;
     }
 
     @Override
-    protected final void onPostExecute(Boolean success) {
-        super.onPostExecute(success);
+    protected final void onPostExecute(B result) {
+        super.onPostExecute(result);
 
         activity.asyncTaskFinished();
 
         if(onAsyncTaskFinishListener != null)
-            onAsyncTaskFinishListener.onAsyncTaskFinished(success, this.error);
+            onAsyncTaskFinishListener.onAsyncTaskFinished(result, this.error);
     }
 
-    abstract protected void doInBackground() throws IOException;
+    abstract protected B doWork(A... params) throws IOException;
 
     public void setOnAsyncTaskFinishListener(OnAsyncTaskFinishListener onAsyncTaskFinishListener) {
         this.onAsyncTaskFinishListener = onAsyncTaskFinishListener;

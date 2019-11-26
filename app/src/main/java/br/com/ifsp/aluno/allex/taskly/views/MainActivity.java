@@ -37,12 +37,14 @@ import java.util.List;
 import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.R;
 import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
+import br.com.ifsp.aluno.allex.taskly.events.OnAsyncTaskFinishListener;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaActionListener;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaLongClickListener;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaStatusChangedListener;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 import br.com.ifsp.aluno.allex.taskly.notifications.TarefaNotificationReceiver;
 import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
+import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.tasks.ListarTarefasAsyncTask;
 import br.com.ifsp.aluno.allex.taskly.ui.TarefaLongtouchOptionsFragment;
 import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaRecyclerViewAdapter;
 
@@ -65,6 +67,11 @@ public class MainActivity extends AsyncActivity
         tarefas.addAll(tarefaRepository.findAll());
 
         initComponents();
+
+        SharedPreferences prefs = getSharedPreferences(Constantes.PREF_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(Constantes.PREF_CONTA_PADRAO, "allexxrodriguess@gmail.com");
+        editor.commit();
 
         removeTarefasAntigas();
     }
@@ -94,7 +101,22 @@ public class MainActivity extends AsyncActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        snackbar.dismiss();
+                        SharedPreferences preferences = getSharedPreferences(Constantes.PREF_NAME, MODE_PRIVATE);
+                        String conta = preferences.getString(Constantes.PREF_CONTA_PADRAO, null);
+
+                        if(conta != null) {
+                            ListarTarefasAsyncTask listarTarefasAsyncTask = new ListarTarefasAsyncTask(MainActivity.this);
+                            listarTarefasAsyncTask.setOnAsyncTaskFinishListener(new OnAsyncTaskFinishListener() {
+
+                                @Override
+                                public void onAsyncTaskFinished(Object result, @Nullable Exception error) {
+                                    snackbar.dismiss();
+                                }
+
+                            });
+
+                            listarTarefasAsyncTask.execute(conta);
+                        }
                     }
                 });
             }
@@ -263,7 +285,7 @@ public class MainActivity extends AsyncActivity
         }
 
         tarefaRepository.save(tarefa);
-        // TODO: Atualizar no google
+        // TODO: Atualizar no taskly
         atualizarEstatisticasTarefas();
     }
 
@@ -293,7 +315,7 @@ public class MainActivity extends AsyncActivity
             tarefaNotificationReceiver.cancelNotification(this, tarefa);
 
             if(tarefa.isSincronizada()) {
-                //TODO: Remover do google
+                //TODO: Remover do taskly
             }
 
             if (tarefas.remove(tarefa))
