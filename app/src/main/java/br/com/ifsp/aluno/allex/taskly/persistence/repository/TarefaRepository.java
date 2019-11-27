@@ -93,7 +93,13 @@ public class TarefaRepository {
     }
 
     public List<Tarefa> findAllBeforeDate(Date date) {
-        String filter = String.format("data < '%s'", Constantes.SQLITE_DATE_TIME_FORMAT.format(date));
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+
+        String filter = String.format("data < '%s'", Constantes.SQLITE_DATE_TIME_FORMAT.format(c.getTime()));
 
         return dao.get(filter);
     }

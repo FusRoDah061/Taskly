@@ -69,14 +69,14 @@ public class TarefaDAO {
         values.put(Constantes.COLUMN_TAREFA_SINCRONIZADA, tarefa.isSincronizada() ? 1 : 0);
         values.put(Constantes.COLUMN_TAREFA_STATUS, tarefa.getStatus().toString());
 
+        if (tarefa.isSincronizada()) {
+            values.put(Constantes.COLUMN_TAREFA_TASKLY_ID, tarefa.getTasklyTaskId());
+        }
+
         try {
             long id = db.insertOrThrow(Constantes.TABLE_TAREFA, null, values);
 
             tarefa.setId(id);
-
-            if (tarefa.isSincronizada()) {
-                values.put(Constantes.COLUMN_TAREFA_TASKLY_ID, tarefa.getTasklyTaskId());
-            }
 
             db.setTransactionSuccessful();
         }
@@ -110,11 +110,11 @@ public class TarefaDAO {
         values.put(Constantes.COLUMN_TAREFA_SINCRONIZADA, tarefa.isSincronizada() ? 1 : 0);
         values.put(Constantes.COLUMN_TAREFA_STATUS, tarefa.getStatus().toString());
 
-        db.update(Constantes.TABLE_TAREFA, values, "id = ?", new String[] { String.valueOf(tarefa.getId()) });
-
         if (tarefa.isSincronizada()) {
             values.put(Constantes.COLUMN_TAREFA_TASKLY_ID, tarefa.getTasklyTaskId());
         }
+
+        db.update(Constantes.TABLE_TAREFA, values, "id = ?", new String[] { String.valueOf(tarefa.getId()) });
 
         db.close();
     }

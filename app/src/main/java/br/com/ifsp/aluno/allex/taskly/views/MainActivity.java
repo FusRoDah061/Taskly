@@ -69,75 +69,83 @@ public class MainActivity extends AsyncActivity
 
         initComponents();
 
+        //TODO remover
         SharedPreferences prefs = getSharedPreferences(Constantes.PREF_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(Constantes.PREF_CONTA_PADRAO, "allexxrodriguess@gmail.com");
         editor.commit();
 
-        removeTarefasAntigas();
+        sincronizarTarefas();
     }
 
-    private void removeTarefasAntigas() {
+    private void sincronizarTarefas() {
         CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainActivityRoot);
         final Snackbar snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#FFC614\">Sincronizando tarefas...</font>", Html.FROM_HTML_MODE_LEGACY), Snackbar.LENGTH_INDEFINITE);
         snackbar.show();
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                final TarefaRepository tarefaRepository = new TarefaRepository(MainActivity.this);
+        SharedPreferences preferences = getSharedPreferences(Constantes.PREF_NAME, MODE_PRIVATE);
+        String conta = preferences.getString(Constantes.PREF_CONTA_PADRAO, null);
 
-                List<Tarefa> tarefasPassadas = tarefaRepository.findAllBeforeDate(new Date());
+        if(conta != null) {
+            ListarTarefasAsyncTask listarTarefasAsyncTask = new ListarTarefasAsyncTask(MainActivity.this);
+            listarTarefasAsyncTask.setOnAsyncTaskFinishListener(new OnAsyncTaskFinishListener<List<TarefaDTO>>() {
+                @Override
+                public void onAsyncTaskFinished(List<TarefaDTO> result, @Nullable Exception error) {
 
-                for(Tarefa tarefa : tarefasPassadas) {
-                    tarefaRepository.delete(tarefa);
-                }
+                    final List<TarefaDTO> tarefasRemotas = (result != null) ? new ArrayList<>(result) : null;
 
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                    Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        SharedPreferences preferences = getSharedPreferences(Constantes.PREF_NAME, MODE_PRIVATE);
-                        String conta = preferences.getString(Constantes.PREF_CONTA_PADRAO, null);
+                            final TarefaRepository tarefaRepository = new TarefaRepository(MainActivity.this);
 
-                        if(conta != null) {
-                            ListarTarefasAsyncTask listarTarefasAsyncTask = new ListarTarefasAsyncTask(MainActivity.this);
-                            listarTarefasAsyncTask.setOnAsyncTaskFinishListener(new OnAsyncTaskFinishListener<List<TarefaDTO>>() {
-                                @Override
-                                public void onAsyncTaskFinished(List<TarefaDTO> result, @Nullable Exception error) {
+                            if(tarefasRemotas != null) {
+                                for (TarefaDTO tarefaDTO : tarefasRemotas) {
 
-                                    for(TarefaDTO tarefaDTO : result) {
+                                    Tarefa tarefa = tarefaRepository.findByTasklyId(tarefaDTO.getId());
 
-                                        if(tarefaRepository.findByTasklyId(tarefaDTO.getId()) != null) continue;
-
-                                        Tarefa tarefa = new Tarefa();
+                                    if(tarefa == null) {
+                                        tarefa = new Tarefa();
                                         tarefa.setDescricao(tarefaDTO.getDescricao());
                                         tarefa.setData(tarefaDTO.getCreatedAt());
                                         tarefa.setSincronizada(true);
                                         tarefa.setTasklyTaskId(tarefaDTO.getId());
                                         tarefa.setStatus(tarefaDTO.getProgresso() == 100 ? EStatusTarefa.CONCLUIDA : EStatusTarefa.PENDENTE);
-
-                                        tarefaRepository.save(tarefa);
+                                    }
+                                    else{
+                                        tarefa.setDescricao(tarefaDTO.getDescricao());
+                                        tarefa.setStatus(tarefaDTO.getProgresso() == 100 ? EStatusTarefa.CONCLUIDA : EStatusTarefa.PENDENTE);
                                     }
 
+                                    tarefaRepository.save(tarefa);
+                                }
+
+                            }
+
+                            List<Tarefa> tarefasPassadas = tarefaRepository.findAllBeforeDate(new Date());
+
+                            for(Tarefa tarefa : tarefasPassadas) {
+                                tarefaRepository.delete(tarefa);
+                            }
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
                                     buscarTarefas(spDiaFiltroTarefas.getSelectedItemPosition());
                                     snackbar.dismiss();
                                 }
                             });
-
-                            listarTarefasAsyncTask.execute(conta);
                         }
-                    }
-                });
-            }
-        };
+                    };
 
-        new Thread(runnable).start();
+                    new Thread(runnable).start();
+                }
+            });
+
+            listarTarefasAsyncTask.execute(conta);
+        }
+
     }
 
     @Override
