@@ -1,6 +1,11 @@
 package br.com.ifsp.aluno.allex.taskly.tasklyweb.api;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Date;
+
+import br.com.ifsp.aluno.allex.taskly.Constantes;
 
 public class TarefaDTO {
 
@@ -9,6 +14,7 @@ public class TarefaDTO {
     private String descricao;
     private Integer progresso;
     private Date createdAt;
+    private String account;
 
     public Long getId() {
         return id;
@@ -48,5 +54,26 @@ public class TarefaDTO {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String toJson() {
+        JSONObject jsonObject= new JSONObject();
+        try {
+            jsonObject.put("descricao", this.descricao);
+            jsonObject.put("data", Constantes.TASKLY_DATE_TIME_FORMAT.format(this.createdAt));
+
+            return jsonObject.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 }

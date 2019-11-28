@@ -1,9 +1,7 @@
 package br.com.ifsp.aluno.allex.taskly.viewmodels;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.text.TextUtils;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
@@ -17,6 +15,7 @@ import java.util.GregorianCalendar;
 
 import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
+import br.com.ifsp.aluno.allex.taskly.views.AsyncActivity;
 
 public class TarefaViewModel extends BaseViewModel {
 
@@ -26,7 +25,7 @@ public class TarefaViewModel extends BaseViewModel {
     @Bindable
     private String toastMessage = null;
 
-    public TarefaViewModel(Tarefa tarefa, Activity activity) {
+    public TarefaViewModel(Tarefa tarefa, AsyncActivity activity) {
         super(tarefa, activity);
 
         dataTarefa = Constantes.DATE_FORMAT.format(tarefa.getData());

@@ -17,6 +17,8 @@ import java.util.List;
 
 import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.R;
+import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
+import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.httpclient.HttpClient;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.httpclient.HttpException;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.httpclient.HttpResponse;
@@ -46,14 +48,17 @@ public class TasklyWebClient {
         return parseTarefa(response);
     }
 
-    public void criaTarefa(Long id, TarefaDTO tarefa) {
+    public void criaTarefa(TarefaDTO tarefa) {
         ContentValues headers = new ContentValues();
         headers.put("Content-type", "application/json");
 
+        String json = tarefa.toJson();
+
         HttpClient client = new HttpClient.Builder()
-                .setUrl(Constantes.URL_ENDPOINT_TASKLY_TAREFAS + "/" + id)
+                .setUrl(Constantes.URL_ENDPOINT_TASKLY_TAREFAS + "/" + tarefa.getAccount())
                 .setMethod("POST")
                 .setHeaders(headers)
+                .setBody(json)
                 .build();
 
         HttpResponse response = client.getResponse();
@@ -93,7 +98,18 @@ public class TasklyWebClient {
         }
     }
 
-    public void askTasklyAccount(final Context context) {
+    public static TarefaDTO mapTarefaToTarefaDTO(Tarefa tarefa) {
+        TarefaDTO dto = new TarefaDTO();
+        dto.setDescricao(tarefa.getDescricao());
+        dto.setProgresso(tarefa.getStatus() == EStatusTarefa.CONCLUIDA ? 100 : 0);
+        dto.setCreatedAt(tarefa.getData());
+        dto.setId(tarefa.getTasklyTaskId());
+        dto.setAccount(tarefa.getTasklyAccount());
+
+        return dto;
+    }
+
+    public static void askTasklyAccount(final Context context) {
         final InputDialog inputDialog = new InputDialog(context);
         inputDialog
                 .setTitle(context.getResources().getString(R.string.str_input_dialog_add_conta_title))

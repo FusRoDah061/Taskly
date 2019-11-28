@@ -191,7 +191,7 @@ public class MainActivity extends AsyncActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_conta) {
-            definirContaPadrao();
+            TasklyWebClient.askTasklyAccount(this);
         } else if (id == R.id.nav_tarefa) {
             abrirNovaTarefaActivity(null);
         } else if (id == R.id.nav_sobre) {
@@ -202,11 +202,6 @@ public class MainActivity extends AsyncActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private void definirContaPadrao() {
-        TasklyWebClient tasklyWebClient = new TasklyWebClient();
-        tasklyWebClient.askTasklyAccount(this);
     }
 
     @Override

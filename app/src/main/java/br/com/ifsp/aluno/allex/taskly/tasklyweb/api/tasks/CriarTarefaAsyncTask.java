@@ -1,31 +1,30 @@
 package br.com.ifsp.aluno.allex.taskly.tasklyweb.api.tasks;
 
 import java.io.IOException;
-import java.util.List;
 
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.TarefaDTO;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.TasklyWebClient;
 import br.com.ifsp.aluno.allex.taskly.views.AsyncActivity;
 
-public class ListarTarefasAsyncTask extends TasklyAsyncTask<String, List<TarefaDTO>> {
+public class CriarTarefaAsyncTask extends TasklyAsyncTask<TarefaDTO, Boolean> {
 
-    public ListarTarefasAsyncTask(AsyncActivity activity) {
+    public CriarTarefaAsyncTask(AsyncActivity activity) {
         super(activity);
     }
 
     @Override
-    protected List<TarefaDTO> doWork(String... params) throws IOException {
-        TasklyWebClient client = new TasklyWebClient();
-        String account = params[0];
+    protected Boolean doWork(TarefaDTO... params) throws IOException {
+        TasklyWebClient tasklyWebClient = new TasklyWebClient();
+        TarefaDTO tarefaDTO = params[0];
 
         try {
-            return client.getTarefas(account);
+            tasklyWebClient.criaTarefa(tarefaDTO);
+            return true;
         }
         catch (Exception e) {
             this.error = e;
             e.printStackTrace();
-            return null;
+            return false;
         }
     }
-
 }

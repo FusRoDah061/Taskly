@@ -1,6 +1,5 @@
 package br.com.ifsp.aluno.allex.taskly.viewmodels;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -15,6 +14,7 @@ import br.com.ifsp.aluno.allex.taskly.Globals;
 import br.com.ifsp.aluno.allex.taskly.R;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 import br.com.ifsp.aluno.allex.taskly.ui.InputDialog;
+import br.com.ifsp.aluno.allex.taskly.views.AsyncActivity;
 
 public class SincronizarViewModel extends BaseViewModel {
 
@@ -25,7 +25,7 @@ public class SincronizarViewModel extends BaseViewModel {
 
     private String contaSincronizacao;
 
-    public SincronizarViewModel(Tarefa tarefa, Activity activity) {
+    public SincronizarViewModel(Tarefa tarefa, AsyncActivity activity) {
         super(tarefa, activity);
         preferences = activity.getSharedPreferences(Constantes.PREF_NAME, Context.MODE_PRIVATE);
         setContaSincronizacao(preferences.getString(Constantes.PREF_CONTA_PADRAO, null));
@@ -71,6 +71,7 @@ public class SincronizarViewModel extends BaseViewModel {
                     .show();
         }
         else {
+            tarefa.setTasklyAccount(contaSincronizacao);
             tarefa.setSincronizada(true);
             goToNextFragment();
         }

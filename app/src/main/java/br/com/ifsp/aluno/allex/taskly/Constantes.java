@@ -11,6 +11,7 @@ public interface Constantes {
     SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm", new Locale("pt","BR"));
     SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm", new Locale("pt","BR"));
     SimpleDateFormat SQLITE_DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss", new Locale("pt","BR"));
+    SimpleDateFormat TASKLY_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", new Locale("pt","BR"));
 
     Integer DATABASE_VERSION = 1;
     String DATABASE_NAME = "tarefas.db";
@@ -41,5 +42,5 @@ public interface Constantes {
     String URL_ENDPOINT_TASKLY_TAREFAS = URL_TASKLY_BASE + "api/tarefas";
     String URL_ENDPOINT_TASKLY_TAREFA = URL_TASKLY_BASE + "api/tarefa";
 
-    int HTTP_REQUEST_TIMEOUT = 15000;
+    int HTTP_REQUEST_TIMEOUT = 60000;
 }

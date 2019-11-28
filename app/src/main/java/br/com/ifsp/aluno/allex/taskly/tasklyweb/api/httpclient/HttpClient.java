@@ -1,7 +1,6 @@
 package br.com.ifsp.aluno.allex.taskly.tasklyweb.api.httpclient;
 
 import android.content.ContentValues;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,9 +11,6 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import br.com.ifsp.aluno.allex.taskly.Constantes;
 
@@ -75,8 +71,6 @@ public class HttpClient {
                 buffer.append(linha);
             }
 
-            Log.i("REQUEST_RESPONSE", buffer.toString());
-
             response.setContent(buffer.toString());
             return response;
         }
@@ -117,14 +111,8 @@ public class HttpClient {
     }
 
     private void setHeaderFields(HttpURLConnection urlConnection) {
-
-        Map<String, List<String>> urlHeaders = urlConnection.getHeaderFields();
-
         for (String key : headers.keySet()) {
-            List<String> values = new ArrayList<>(1);
-            values.add(headers.getAsString(key));
-
-            urlHeaders.put(key, values);
+            urlConnection.setRequestProperty(key, headers.getAsString(key));
         }
     }
 

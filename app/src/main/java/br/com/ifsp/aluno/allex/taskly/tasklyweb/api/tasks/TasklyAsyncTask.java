@@ -12,7 +12,7 @@ public abstract class TasklyAsyncTask<A, B> extends AsyncTask<A, Void, B> {
     protected final AsyncActivity activity;
 
     private OnAsyncTaskFinishListener onAsyncTaskFinishListener;
-    private Exception error;
+    protected Exception error;
 
     public TasklyAsyncTask(AsyncActivity activity) {
         this.activity = activity;

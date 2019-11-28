@@ -1,22 +1,25 @@
 package br.com.ifsp.aluno.allex.taskly.viewmodels;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import androidx.databinding.Bindable;
 
+import javax.annotation.Nullable;
+
 import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.R;
-import br.com.ifsp.aluno.allex.taskly.enums.ETarefaSincronizadaResult;
-import br.com.ifsp.aluno.allex.taskly.events.OnTarefaSincronizadaListener;
+import br.com.ifsp.aluno.allex.taskly.events.OnAsyncTaskFinishListener;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 import br.com.ifsp.aluno.allex.taskly.notifications.TarefaNotificationReceiver;
 import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
+import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.TarefaDTO;
+import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.TasklyWebClient;
+import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.tasks.CriarTarefaAsyncTask;
+import br.com.ifsp.aluno.allex.taskly.views.AsyncActivity;
 
-public class ConcluirViewModel extends BaseViewModel implements OnTarefaSincronizadaListener {
+public class ConcluirViewModel extends BaseViewModel {
 
-    public ConcluirViewModel(Tarefa tarefa, Activity activity) {
+    public ConcluirViewModel(Tarefa tarefa, AsyncActivity activity) {
         super(tarefa, activity);
     }
 
@@ -45,10 +48,25 @@ public class ConcluirViewModel extends BaseViewModel implements OnTarefaSincroni
 
     public void onLegalClicked() {
         if(tarefa.isSincronizada()){
-            // TODO: Chamar taskly
-            // TODO: Se conta não tiver definida, perguntar aqui
-            SharedPreferences preferences = activity.getSharedPreferences(Constantes.PREF_NAME, Context.MODE_PRIVATE);
-            String account = preferences.getString(Constantes.PREF_CONTA_PADRAO, null);
+            TarefaDTO tarefaDTO = TasklyWebClient.mapTarefaToTarefaDTO(tarefa);
+            CriarTarefaAsyncTask criarTarefaAsyncTask = new CriarTarefaAsyncTask(activity);
+
+            criarTarefaAsyncTask.setOnAsyncTaskFinishListener(new OnAsyncTaskFinishListener<Boolean>() {
+                @Override
+                public void onAsyncTaskFinished(Boolean result, @Nullable Exception error) {
+                    if (result) {
+                        finalizarCriacaoTarefa();
+                    }
+                    else {
+                        if(error != null) {
+                            error.printStackTrace();
+                        }
+
+                        Toast.makeText(activity, "Erro ao enviar a tarefa.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            criarTarefaAsyncTask.execute(tarefaDTO);
         }
         else {
             finalizarCriacaoTarefa();
@@ -62,16 +80,5 @@ public class ConcluirViewModel extends BaseViewModel implements OnTarefaSincroni
         tarefaNotificationReceiver.scheduleNotification(activity, tarefa);
 
         goToNextFragment();
-    }
-
-    @Override
-    public void onTarefaSincronizada(Tarefa tarefa, ETarefaSincronizadaResult result, Exception error) {
-        if(result == ETarefaSincronizadaResult.SUCCESS) {
-            finalizarCriacaoTarefa();
-        }
-        else{
-            error.printStackTrace();
-            //TODO: Perguntar se quer tentar denovo
-        }
     }
 }
