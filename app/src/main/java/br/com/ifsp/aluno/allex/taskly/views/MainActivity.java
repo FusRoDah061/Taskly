@@ -45,6 +45,7 @@ import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.TarefaDTO;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.TasklyWebClient;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.tasks.AtualizarTarefaAsyncTask;
+import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.tasks.DeletarTarefaAsyncTask;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.tasks.ListarTarefasAsyncTask;
 import br.com.ifsp.aluno.allex.taskly.ui.TarefaLongtouchOptionsFragment;
 import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaRecyclerViewAdapter;
@@ -306,7 +307,7 @@ public class MainActivity extends AsyncActivity
                         error.printStackTrace();
                     }
 
-                    Toast.makeText(MainActivity.this, "Erro ao atualizar a tarefa.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Erro ao atualizar a tarefa no Taskly Web.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -338,14 +339,33 @@ public class MainActivity extends AsyncActivity
             TarefaNotificationReceiver tarefaNotificationReceiver = new TarefaNotificationReceiver();
             tarefaNotificationReceiver.cancelNotification(this, tarefa);
 
-            if(tarefa.isSincronizada()) {
-                //TODO: Remover do taskly
-            }
-
             if (tarefas.remove(tarefa))
                 tarefaRecyclerViewAdapter.notifyDataSetChanged();
 
             atualizarEstatisticasTarefas();
+
+            if(tarefa.isSincronizada()) {
+                if(!this.estaSincronizado) return;
+
+                if(tarefa.getTasklyTaskId() == null) return;
+
+                final TarefaDTO tarefaDTO = TasklyWebClient.mapTarefaToTarefaDTO(tarefa);
+                DeletarTarefaAsyncTask deletarTarefaAsyncTask = new DeletarTarefaAsyncTask(this);
+
+                deletarTarefaAsyncTask.setOnAsyncTaskFinishListener(new OnAsyncTaskFinishListener<Boolean>() {
+                    @Override
+                    public void onAsyncTaskFinished(Boolean result, @Nullable Exception error) {
+                        if (!result) {
+                            if (error != null) {
+                                error.printStackTrace();
+                            }
+
+                            Toast.makeText(MainActivity.this, "Erro ao excluir a tarefa no Taskly Web.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                deletarTarefaAsyncTask.execute(tarefaDTO);
+            }
         }
     }
 
