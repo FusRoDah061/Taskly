@@ -69,12 +69,6 @@ public class MainActivity extends AsyncActivity
 
         initComponents();
 
-        //TODO remover
-        SharedPreferences prefs = getSharedPreferences(Constantes.PREF_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(Constantes.PREF_CONTA_PADRAO, "allexxrodriguess@gmail.com");
-        editor.commit();
-
         sincronizarTarefas();
     }
 
@@ -174,7 +168,10 @@ public class MainActivity extends AsyncActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_sobre) {
+        if(id == R.id.action_sincronizar) {
+            sincronizarTarefas();
+        }
+        else if (id == R.id.action_sobre) {
             Intent intent = new Intent(this, SobreActivity.class);
             startActivity(intent);
             return true;

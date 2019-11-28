@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_sincronizar"
+        android:orderInCategory="25"
+        android:title="@string/action_sincronizar"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_sobre"
         android:orderInCategory="50"
         android:title="@string/action_sobre"
