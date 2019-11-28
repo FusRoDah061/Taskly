@@ -13,6 +13,7 @@ public class Tarefa implements Serializable {
     private boolean sincronizada;
     private EStatusTarefa status;
     private Long tasklyTaskId;
+    private String tasklyAccount;
 
     public Tarefa() {
         this.id = null;
@@ -21,6 +22,7 @@ public class Tarefa implements Serializable {
         this.sincronizada = false;
         this.status = EStatusTarefa.PENDENTE;
         this.tasklyTaskId = null;
+        this.tasklyAccount = null;
     }
 
     public Long getId() {
@@ -69,5 +71,13 @@ public class Tarefa implements Serializable {
 
     public void setTasklyTaskId(Long tasklyTaskId) {
         this.tasklyTaskId = tasklyTaskId;
+    }
+
+    public String getTasklyAccount() {
+        return tasklyAccount;
+    }
+
+    public void setTasklyAccount(String tasklyAccount) {
+        this.tasklyAccount = tasklyAccount;
     }
 }

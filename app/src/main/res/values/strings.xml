@@ -27,6 +27,12 @@
 
     <string name="str_default_account_set">\u00A0 definida como conta Taskly padrão.</string>
     <string name="str_tarefa_sincronizada_aviso">Ah, e sua tarefa será sincronizada com sua lista no Taskly Web!</string>
+    <string name="str_input_dialog_add_conta_title">Adicionar conta</string>
+    <string name="str_input_dialog_add_conta_placeholder">meu_email@taskly.com</string>
+    <string name="str_input_dialog_add_conta_posbutton">Salvar</string>
+    <string name="str_input_dialog_add_conta_negbutton">Cancelar</string>
+    <string name="str_input_dialog_add_conta_noaccount">Nenhuma conta definida.</string>
+    <string name="str_input_dialog_add_conta_noaccount_sync">Nenhuma conta definida. Para sincronizar a tarefa é preciso definir uma conta.</string>
 
     <string-array name="dias_array">
         <item>Hoje</item>

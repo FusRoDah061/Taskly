@@ -23,6 +23,7 @@ public interface Constantes {
     String COLUMN_TAREFA_SINCRONIZADA = "sincronizada";
     String COLUMN_TAREFA_STATUS = "status";
     String COLUMN_TAREFA_TASKLY_ID= "taskly_id";
+    String COLUMN_TAREFA_TASKLY_ACCOUNT= "taskly_account";
 
     int DIAS_HOJE = 0;
     int DIAS_AMANHA = 1;

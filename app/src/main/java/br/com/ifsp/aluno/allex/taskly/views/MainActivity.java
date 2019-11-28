@@ -1,7 +1,5 @@
 package br.com.ifsp.aluno.allex.taskly.views;
 
-import android.accounts.AccountManager;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +42,7 @@ import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 import br.com.ifsp.aluno.allex.taskly.notifications.TarefaNotificationReceiver;
 import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.TarefaDTO;
+import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.TasklyWebClient;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.tasks.ListarTarefasAsyncTask;
 import br.com.ifsp.aluno.allex.taskly.ui.TarefaLongtouchOptionsFragment;
 import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaRecyclerViewAdapter;
@@ -73,14 +71,14 @@ public class MainActivity extends AsyncActivity
     }
 
     private void sincronizarTarefas() {
-        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainActivityRoot);
-        final Snackbar snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#FFC614\">Sincronizando tarefas...</font>", Html.FROM_HTML_MODE_LEGACY), Snackbar.LENGTH_INDEFINITE);
-        snackbar.show();
-
         SharedPreferences preferences = getSharedPreferences(Constantes.PREF_NAME, MODE_PRIVATE);
-        String conta = preferences.getString(Constantes.PREF_CONTA_PADRAO, null);
+        final String conta = preferences.getString(Constantes.PREF_CONTA_PADRAO, null);
 
         if(conta != null) {
+            CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainActivityRoot);
+            final Snackbar snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#FFC614\">Sincronizando tarefas...</font>", Html.FROM_HTML_MODE_LEGACY), Snackbar.LENGTH_INDEFINITE);
+            snackbar.show();
+
             ListarTarefasAsyncTask listarTarefasAsyncTask = new ListarTarefasAsyncTask(MainActivity.this);
             listarTarefasAsyncTask.setOnAsyncTaskFinishListener(new OnAsyncTaskFinishListener<List<TarefaDTO>>() {
                 @Override
@@ -106,10 +104,12 @@ public class MainActivity extends AsyncActivity
                                         tarefa.setSincronizada(true);
                                         tarefa.setTasklyTaskId(tarefaDTO.getId());
                                         tarefa.setStatus(tarefaDTO.getProgresso() == 100 ? EStatusTarefa.CONCLUIDA : EStatusTarefa.PENDENTE);
+                                        tarefa.setTasklyAccount(conta);
                                     }
                                     else{
                                         tarefa.setDescricao(tarefaDTO.getDescricao());
                                         tarefa.setStatus(tarefaDTO.getProgresso() == 100 ? EStatusTarefa.CONCLUIDA : EStatusTarefa.PENDENTE);
+                                        tarefa.setTasklyAccount(conta);
                                     }
 
                                     tarefaRepository.save(tarefa);
@@ -145,6 +145,7 @@ public class MainActivity extends AsyncActivity
     @Override
     protected void onResume() {
         super.onResume();
+        sincronizarTarefas();
         buscarTarefas(spDiaFiltroTarefas.getSelectedItemPosition());
     }
 
@@ -190,7 +191,7 @@ public class MainActivity extends AsyncActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_conta) {
-            //TODO: Mostrar input para e-mail do taskly
+            definirContaPadrao();
         } else if (id == R.id.nav_tarefa) {
             abrirNovaTarefaActivity(null);
         } else if (id == R.id.nav_sobre) {
@@ -203,29 +204,9 @@ public class MainActivity extends AsyncActivity
         return true;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode) {
-            case Constantes.REQ_CODE_DIALOG_CONTA_TASKLY:
-                if (resultCode == Activity.RESULT_OK && data != null && data.getExtras() != null) {
-                    String accountName = data.getExtras().getString(AccountManager.KEY_ACCOUNT_NAME);
-
-                    if (accountName != null) {
-
-                        SharedPreferences prefs = getSharedPreferences(Constantes.PREF_NAME, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString(Constantes.PREF_CONTA_PADRAO, accountName);
-                        editor.commit();
-
-                        atualizarContaGoogle();
-
-                        Toast.makeText(this, accountName + getResources().getString(R.string.str_default_account_set), Toast.LENGTH_SHORT).show();
-                    }
-                }
-                break;
-        }
+    private void definirContaPadrao() {
+        TasklyWebClient tasklyWebClient = new TasklyWebClient();
+        tasklyWebClient.askTasklyAccount(this);
     }
 
     @Override
@@ -370,10 +351,10 @@ public class MainActivity extends AsyncActivity
     @Override
     public void onDrawerOpened(@NonNull View drawerView) {
         atualizarEstatisticasTarefas();
-        atualizarContaGoogle();
+        atualizarConta();
     }
 
-    private void atualizarContaGoogle() {
+    private void atualizarConta() {
         TextView tvContaPadrao = (TextView) navigationView.findViewById(R.id.tvContaPadrao);
 
         if(tvContaPadrao == null) return;

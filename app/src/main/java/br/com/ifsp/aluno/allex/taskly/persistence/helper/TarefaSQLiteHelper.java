@@ -38,7 +38,8 @@ public class TarefaSQLiteHelper extends SQLiteOpenHelper {
                      "  data varchar(15) not null," +
                      "  sincronizada integer not null default 0," +
                      "  status varchar(10) not null default 'PENDENTE'," +
-                     "  taskly_id integer);";
+                     "  taskly_id integer," +
+                     "  taskly_account varchar(256));";
 
         db.execSQL(sql);
     }

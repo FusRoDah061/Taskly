@@ -1,8 +1,11 @@
 package br.com.ifsp.aluno.allex.taskly.tasklyweb.api;
 
 import android.content.ContentValues;
-
-import com.google.api.client.http.HttpResponseException;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.text.TextUtils;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,10 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ifsp.aluno.allex.taskly.Constantes;
-import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
+import br.com.ifsp.aluno.allex.taskly.R;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.httpclient.HttpClient;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.httpclient.HttpException;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.httpclient.HttpResponse;
+import br.com.ifsp.aluno.allex.taskly.ui.InputDialog;
 
 public class TasklyWebClient {
 
@@ -87,6 +91,38 @@ public class TasklyWebClient {
         if(response.getResponseCode() != 200) {
             throw  new HttpException(response.getResponseCode(), response.getResponseMessage());
         }
+    }
+
+    public void askTasklyAccount(final Context context) {
+        final InputDialog inputDialog = new InputDialog(context);
+        inputDialog
+                .setTitle(context.getResources().getString(R.string.str_input_dialog_add_conta_title))
+                .setPlaceholder(context.getResources().getString(R.string.str_input_dialog_add_conta_placeholder))
+                .setPositiveButton(context.getResources().getString(R.string.str_input_dialog_add_conta_posbutton), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String email = inputDialog.getValue();
+
+                        if(!TextUtils.isEmpty(email)) {
+                            SharedPreferences prefs = context.getSharedPreferences(Constantes.PREF_NAME, Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putString(Constantes.PREF_CONTA_PADRAO, email);
+                            editor.commit();
+
+                            Toast.makeText(context, email + context.getResources().getString(R.string.str_default_account_set), Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(context, context.getResources().getString(R.string.str_input_dialog_add_conta_noaccount), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton(context.getResources().getString(R.string.str_input_dialog_add_conta_negbutton), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(context, context.getResources().getString(R.string.str_input_dialog_add_conta_noaccount), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .show();
     }
 
     private List<TarefaDTO> parseTarefas(HttpResponse response) {
