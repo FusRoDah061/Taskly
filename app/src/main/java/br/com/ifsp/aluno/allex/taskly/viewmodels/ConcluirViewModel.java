@@ -48,13 +48,14 @@ public class ConcluirViewModel extends BaseViewModel {
 
     public void onLegalClicked() {
         if(tarefa.isSincronizada()){
-            TarefaDTO tarefaDTO = TasklyWebClient.mapTarefaToTarefaDTO(tarefa);
+            final TarefaDTO tarefaDTO = TasklyWebClient.mapTarefaToTarefaDTO(tarefa);
             CriarTarefaAsyncTask criarTarefaAsyncTask = new CriarTarefaAsyncTask(activity);
 
-            criarTarefaAsyncTask.setOnAsyncTaskFinishListener(new OnAsyncTaskFinishListener<Boolean>() {
+            criarTarefaAsyncTask.setOnAsyncTaskFinishListener(new OnAsyncTaskFinishListener<TarefaDTO>() {
                 @Override
-                public void onAsyncTaskFinished(Boolean result, @Nullable Exception error) {
-                    if (result) {
+                public void onAsyncTaskFinished(TarefaDTO result, @Nullable Exception error) {
+                    if (result != null) {
+                        tarefa.setTasklyTaskId(result.getId());
                         finalizarCriacaoTarefa();
                     }
                     else {

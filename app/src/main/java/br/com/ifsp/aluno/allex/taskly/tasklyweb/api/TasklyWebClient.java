@@ -48,7 +48,7 @@ public class TasklyWebClient {
         return parseTarefa(response);
     }
 
-    public void criaTarefa(TarefaDTO tarefa) {
+    public TarefaDTO criaTarefa(TarefaDTO tarefa) {
         ContentValues headers = new ContentValues();
         headers.put("Content-type", "application/json");
 
@@ -66,9 +66,11 @@ public class TasklyWebClient {
         if(response.getResponseCode() != 200) {
             throw  new HttpException(response.getResponseCode(), response.getResponseMessage());
         }
+
+        return parseTarefa(response);
     }
 
-    public void atualizaTarefa(Long id, TarefaDTO tarefa) {
+    public TarefaDTO atualizaTarefa(Long id, TarefaDTO tarefa) {
         ContentValues headers = new ContentValues();
         headers.put("Content-type", "application/json");
 
@@ -83,6 +85,8 @@ public class TasklyWebClient {
         if(response.getResponseCode() != 200) {
             throw  new HttpException(response.getResponseCode(), response.getResponseMessage());
         }
+
+        return parseTarefa(response);
     }
 
     public void deleteTarefa(Long id) {

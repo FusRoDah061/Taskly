@@ -66,8 +66,6 @@ public class MainActivity extends AsyncActivity
         tarefas.addAll(tarefaRepository.findAll());
 
         initComponents();
-
-        sincronizarTarefas();
     }
 
     private void sincronizarTarefas() {
