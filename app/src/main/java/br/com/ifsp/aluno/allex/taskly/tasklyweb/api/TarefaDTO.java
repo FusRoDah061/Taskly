@@ -69,6 +69,7 @@ public class TarefaDTO {
         try {
             jsonObject.put("descricao", this.descricao);
             jsonObject.put("data", Constantes.TASKLY_DATE_TIME_FORMAT.format(this.createdAt));
+            jsonObject.put("progresso", this.progresso);
 
             return jsonObject.toString();
         } catch (JSONException e) {

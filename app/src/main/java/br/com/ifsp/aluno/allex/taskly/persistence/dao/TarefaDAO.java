@@ -49,7 +49,9 @@ public class TarefaDAO {
 
                 try {
                     tarefa.setData(Constantes.SQLITE_DATE_TIME_FORMAT.parse(cursor.getString(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_DATA))));
-                } catch (ParseException e) { e.printStackTrace(); }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 tarefas.add(tarefa);
             } while (cursor.moveToNext());

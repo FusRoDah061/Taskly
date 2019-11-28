@@ -72,7 +72,7 @@ public class NovaTarefaActivity extends AsyncActivity implements BottomNavigatio
         if(navView.getSelectedItemId() == R.id.navigation_tarefa){
             Globals globals = Globals.getInstance();
 
-            if(globals.isPerguntarSincronizar())
+            if(globals.isPerguntarSincronizar() && !tarefa.isSincronizada())
                 proximo = R.id.navigation_sincronizar;
             else
                 proximo = R.id.navigation_concluir;

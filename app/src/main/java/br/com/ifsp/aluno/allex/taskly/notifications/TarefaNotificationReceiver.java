@@ -23,7 +23,7 @@ import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
 
 public class TarefaNotificationReceiver extends WakefulBroadcastReceiver {
-
+    // TODO: WakefulBroadcastReceiver não chama no andorid 9
     private AlarmManager mAlarmManager;
 
     public void onReceive(Context context, Intent intent) {

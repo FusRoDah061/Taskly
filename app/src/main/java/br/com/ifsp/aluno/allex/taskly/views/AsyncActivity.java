@@ -14,10 +14,13 @@ public abstract class AsyncActivity extends AppCompatActivity {
 
     public void asyncTaskStarted() {
         this.numAsyncTasks++;
+        //TODO: Mostrar loading
     }
 
     public void asyncTaskFinished() {
         this.numAsyncTasks--;
         if(this.numAsyncTasks < 0) this.numAsyncTasks = 0;
+
+        //TODO: esconder loading
     }
 }

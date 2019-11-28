@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,6 +44,7 @@ import br.com.ifsp.aluno.allex.taskly.notifications.TarefaNotificationReceiver;
 import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.TarefaDTO;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.TasklyWebClient;
+import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.tasks.AtualizarTarefaAsyncTask;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.tasks.ListarTarefasAsyncTask;
 import br.com.ifsp.aluno.allex.taskly.ui.TarefaLongtouchOptionsFragment;
 import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaRecyclerViewAdapter;
@@ -58,6 +60,7 @@ public class MainActivity extends AsyncActivity
     private NavigationView navigationView;
 
     private TarefaRecyclerViewAdapter tarefaRecyclerViewAdapter;
+    private boolean estaSincronizado = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +92,7 @@ public class MainActivity extends AsyncActivity
                         public void run() {
 
                             final TarefaRepository tarefaRepository = new TarefaRepository(MainActivity.this);
+                            //TODO: REmover tarefas que estão marcadas como sincronizadas mas que não existem mais no web
 
                             if(tarefasRemotas != null) {
                                 for (TarefaDTO tarefaDTO : tarefasRemotas) {
@@ -125,6 +129,7 @@ public class MainActivity extends AsyncActivity
                                 @Override
                                 public void run() {
                                     buscarTarefas(spDiaFiltroTarefas.getSelectedItemPosition());
+                                    estaSincronizado = true;
                                     snackbar.dismiss();
                                 }
                             });
@@ -279,8 +284,33 @@ public class MainActivity extends AsyncActivity
         }
 
         tarefaRepository.save(tarefa);
-        // TODO: Atualizar no taskly
+        atualizarTarefaRemota(tarefa);
         atualizarEstatisticasTarefas();
+    }
+
+    private void atualizarTarefaRemota(Tarefa tarefa) {
+        if(!this.estaSincronizado) return;
+
+        if(!tarefa.isSincronizada()) return;
+
+        if(tarefa.getTasklyTaskId() == null) return;
+
+        final TarefaDTO tarefaDTO = TasklyWebClient.mapTarefaToTarefaDTO(tarefa);
+        AtualizarTarefaAsyncTask atualizarTarefaAsyncTask = new AtualizarTarefaAsyncTask(this);
+
+        atualizarTarefaAsyncTask.setOnAsyncTaskFinishListener(new OnAsyncTaskFinishListener<TarefaDTO>() {
+            @Override
+            public void onAsyncTaskFinished(TarefaDTO result, @Nullable Exception error) {
+                if (result == null) {
+                    if (error != null) {
+                        error.printStackTrace();
+                    }
+
+                    Toast.makeText(MainActivity.this, "Erro ao atualizar a tarefa.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        atualizarTarefaAsyncTask.execute(tarefaDTO);
     }
 
     @Override

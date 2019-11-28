@@ -52,13 +52,11 @@ public class TasklyWebClient {
         ContentValues headers = new ContentValues();
         headers.put("Content-type", "application/json");
 
-        String json = tarefa.toJson();
-
         HttpClient client = new HttpClient.Builder()
                 .setUrl(Constantes.URL_ENDPOINT_TASKLY_TAREFAS + "/" + tarefa.getAccount())
                 .setMethod("POST")
                 .setHeaders(headers)
-                .setBody(json)
+                .setBody(tarefa.toJson())
                 .build();
 
         HttpResponse response = client.getResponse();
@@ -70,14 +68,15 @@ public class TasklyWebClient {
         return parseTarefa(response);
     }
 
-    public TarefaDTO atualizaTarefa(Long id, TarefaDTO tarefa) {
+    public TarefaDTO atualizaTarefa(TarefaDTO tarefa) {
         ContentValues headers = new ContentValues();
         headers.put("Content-type", "application/json");
 
         HttpClient client = new HttpClient.Builder()
-                .setUrl(Constantes.URL_ENDPOINT_TASKLY_TAREFAS + "/" + id)
+                .setUrl(Constantes.URL_ENDPOINT_TASKLY_TAREFAS + "/" + tarefa.getId())
                 .setMethod("PUT")
                 .setHeaders(headers)
+                .setBody(tarefa.toJson())
                 .build();
 
         HttpResponse response = client.getResponse();

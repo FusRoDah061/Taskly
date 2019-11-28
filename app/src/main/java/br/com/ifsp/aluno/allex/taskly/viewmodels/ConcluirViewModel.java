@@ -14,7 +14,9 @@ import br.com.ifsp.aluno.allex.taskly.notifications.TarefaNotificationReceiver;
 import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.TarefaDTO;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.TasklyWebClient;
+import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.tasks.AtualizarTarefaAsyncTask;
 import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.tasks.CriarTarefaAsyncTask;
+import br.com.ifsp.aluno.allex.taskly.tasklyweb.api.tasks.TasklyAsyncTask;
 import br.com.ifsp.aluno.allex.taskly.views.AsyncActivity;
 
 public class ConcluirViewModel extends BaseViewModel {
@@ -47,8 +49,33 @@ public class ConcluirViewModel extends BaseViewModel {
     }
 
     public void onLegalClicked() {
-        if(tarefa.isSincronizada()){
-            final TarefaDTO tarefaDTO = TasklyWebClient.mapTarefaToTarefaDTO(tarefa);
+        if(!tarefa.isSincronizada()) {
+            finalizarCriacaoTarefa();
+            return;
+        }
+
+        final TarefaDTO tarefaDTO = TasklyWebClient.mapTarefaToTarefaDTO(tarefa);
+
+        if(tarefa.getTasklyTaskId() != null) {
+            AtualizarTarefaAsyncTask atualizarTarefaAsyncTask = new AtualizarTarefaAsyncTask(activity);
+
+            atualizarTarefaAsyncTask.setOnAsyncTaskFinishListener(new OnAsyncTaskFinishListener<TarefaDTO>() {
+                @Override
+                public void onAsyncTaskFinished(TarefaDTO result, @Nullable Exception error) {
+                    if (result != null) {
+                        finalizarCriacaoTarefa();
+                    } else {
+                        if (error != null) {
+                            error.printStackTrace();
+                        }
+
+                        Toast.makeText(activity, "Erro ao atualizar a tarefa.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            atualizarTarefaAsyncTask.execute(tarefaDTO);
+        }
+        else {
             CriarTarefaAsyncTask criarTarefaAsyncTask = new CriarTarefaAsyncTask(activity);
 
             criarTarefaAsyncTask.setOnAsyncTaskFinishListener(new OnAsyncTaskFinishListener<TarefaDTO>() {
@@ -56,10 +83,10 @@ public class ConcluirViewModel extends BaseViewModel {
                 public void onAsyncTaskFinished(TarefaDTO result, @Nullable Exception error) {
                     if (result != null) {
                         tarefa.setTasklyTaskId(result.getId());
+
                         finalizarCriacaoTarefa();
-                    }
-                    else {
-                        if(error != null) {
+                    } else {
+                        if (error != null) {
                             error.printStackTrace();
                         }
 
@@ -69,9 +96,7 @@ public class ConcluirViewModel extends BaseViewModel {
             });
             criarTarefaAsyncTask.execute(tarefaDTO);
         }
-        else {
-            finalizarCriacaoTarefa();
-        }
+
     }
 
     private void finalizarCriacaoTarefa() {
