@@ -1,6 +1,9 @@
 package br.com.ifsp.aluno.allex.taskly.views;
 
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ProgressBar;
@@ -46,6 +49,11 @@ public class SplashActivity extends AppCompatActivity {
 
                             if(value >= 100) {
                                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+
+                                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                                Ringtone r = RingtoneManager.getRingtone(SplashActivity.this.getApplicationContext(), notification);
+                                r.play();
+
                                 startActivity(intent);
                                 finish();
                             }
