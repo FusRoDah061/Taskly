@@ -1,8 +1,12 @@
 package br.com.ifsp.aluno.allex.taskly.views;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -280,6 +284,15 @@ public class MainActivity extends AsyncActivity
     @Override
     public void onTarefaStatusChanged(View view, int position, boolean isChecked, Tarefa tarefa) {
         TarefaNotificationReceiver tarefaNotificationReceiver = new TarefaNotificationReceiver();
+
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            VibrationEffect vibrationEffect = VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE);
+            vibrator.vibrate(vibrationEffect);
+        }
+        else {
+            vibrator.vibrate(100);
+        }
 
         if(isChecked) {
             tarefa.setStatus(EStatusTarefa.CONCLUIDA);
