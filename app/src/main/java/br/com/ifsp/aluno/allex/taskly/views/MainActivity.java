@@ -32,6 +32,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +42,7 @@ import br.com.ifsp.aluno.allex.taskly.R;
 import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
 import br.com.ifsp.aluno.allex.taskly.events.OnAsyncTaskFinishListener;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaActionListener;
+import br.com.ifsp.aluno.allex.taskly.events.OnTarefaClickListener;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaLongClickListener;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaStatusChangedListener;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
@@ -55,7 +57,7 @@ import br.com.ifsp.aluno.allex.taskly.ui.TarefaLongtouchOptionsFragment;
 import br.com.ifsp.aluno.allex.taskly.ui.tarefa.TarefaRecyclerViewAdapter;
 
 public class MainActivity extends AsyncActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener, OnTarefaStatusChangedListener, OnTarefaLongClickListener, OnTarefaActionListener, DrawerLayout.DrawerListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener, OnTarefaStatusChangedListener, OnTarefaLongClickListener, OnTarefaActionListener, DrawerLayout.DrawerListener, OnTarefaClickListener {
 
     private final TarefaRepository tarefaRepository = new TarefaRepository(this);
 
@@ -107,12 +109,7 @@ public class MainActivity extends AsyncActivity
                                     tarefasSincronizadasParaRemover.remove(tarefa);
 
                                     if(tarefa == null) {
-                                        tarefa = new Tarefa();
-                                        tarefa.setDescricao(tarefaDTO.getDescricao());
-                                        tarefa.setData(tarefaDTO.getCreatedAt());
-                                        tarefa.setSincronizada(true);
-                                        tarefa.setTasklyTaskId(tarefaDTO.getId());
-                                        tarefa.setStatus(tarefaDTO.getProgresso() == 100 ? EStatusTarefa.CONCLUIDA : EStatusTarefa.PENDENTE);
+                                        tarefa = TasklyWebClient.mapTarefaDTOToTarefa(tarefaDTO);
                                         tarefa.setTasklyAccount(conta);
                                     }
                                     else{
@@ -253,6 +250,7 @@ public class MainActivity extends AsyncActivity
         tarefaRecyclerViewAdapter = new TarefaRecyclerViewAdapter(tarefas);
         tarefaRecyclerViewAdapter.setOnTarefaStatusChangedListener(this);
         tarefaRecyclerViewAdapter.setOnLongClickListener(this);
+        tarefaRecyclerViewAdapter.setOnTarefaClickListener(this);
 
         rvTarefas.setAdapter(tarefaRecyclerViewAdapter);
         rvTarefas.setLayoutManager(new LinearLayoutManager(this));
@@ -457,4 +455,10 @@ public class MainActivity extends AsyncActivity
     @Override
     public void onDrawerStateChanged(int newState) {}
 
+    @Override
+    public void onTarefaClicked(View view, int position, Tarefa tarefa) {
+        Intent intent = new Intent(MainActivity.this, TarefaPropriedadesActivity.class);
+        intent.putExtra(Constantes.EXTRA_TAREFA, (Serializable) tarefa);
+        startActivity(intent);
+    }
 }

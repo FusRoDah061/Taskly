@@ -17,6 +17,7 @@ import java.util.List;
 import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.R;
 import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
+import br.com.ifsp.aluno.allex.taskly.events.OnTarefaClickListener;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaLongClickListener;
 import br.com.ifsp.aluno.allex.taskly.events.OnTarefaStatusChangedListener;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
@@ -25,6 +26,7 @@ public class TarefaRecyclerViewAdapter extends RecyclerView.Adapter<TarefaRecycl
 
     private OnTarefaStatusChangedListener onTarefaStatusChangedListener;
     private OnTarefaLongClickListener onTarefaLongClickListener;
+    private OnTarefaClickListener onTarefaClickListener;
 
     private List<Tarefa> tarefas;
 
@@ -50,7 +52,7 @@ public class TarefaRecyclerViewAdapter extends RecyclerView.Adapter<TarefaRecycl
         holder.cbTarefaConcluida.setChecked(EStatusTarefa.CONCLUIDA.equals(tarefa.getStatus()));
 
         holder.tvDescricaoTarefa.setText(tarefa.getDescricao());
-        holder.tvDataTarefa.setText(Constantes.DATE_TIME_FORMAT.format(tarefa.getData()));
+        holder.tvDataTarefa.setText(Constantes.DATE_TIME_FORMAT.format(tarefa.getDataLimite()));
 
         if(tarefa.isSincronizada())
             holder.ivTarefaSincronizada.setVisibility(View.VISIBLE);
@@ -71,7 +73,11 @@ public class TarefaRecyclerViewAdapter extends RecyclerView.Adapter<TarefaRecycl
         this.onTarefaLongClickListener = onLongClickListener;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements CompoundButton.OnCheckedChangeListener, View.OnLongClickListener {
+    public void setOnTarefaClickListener(OnTarefaClickListener onTarefaClickListener) {
+        this.onTarefaClickListener = onTarefaClickListener;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements CompoundButton.OnCheckedChangeListener, View.OnLongClickListener, View.OnClickListener {
 
         public CheckBox cbTarefaConcluida;
         public TextView tvDescricaoTarefa;
@@ -89,6 +95,7 @@ public class TarefaRecyclerViewAdapter extends RecyclerView.Adapter<TarefaRecycl
             cbTarefaConcluida.setOnCheckedChangeListener(this);
 
             itemView.setOnLongClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override
@@ -113,6 +120,17 @@ public class TarefaRecyclerViewAdapter extends RecyclerView.Adapter<TarefaRecycl
             }
 
             return false;
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(onTarefaClickListener != null) {
+                int position = getAdapterPosition();
+
+                if (position != RecyclerView.NO_POSITION) {
+                    onTarefaClickListener.onTarefaClicked(v, position, tarefas.get(position));
+                }
+            }
         }
     }
 }

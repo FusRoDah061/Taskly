@@ -6,6 +6,7 @@ import java.util.Locale;
 public interface Constantes {
 
     String EXTRA_TAREFA = "TAREFA";
+    String EXTRA_MAPVIEW = "EXTRA_MAPVIEW";
 
     SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy", new Locale("pt","BR"));
     SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm", new Locale("pt","BR"));
@@ -20,7 +21,10 @@ public interface Constantes {
 
     String COLUMN_TAREFA_ID = "id";
     String COLUMN_TAREFA_DESCRICAO = "descricao";
-    String COLUMN_TAREFA_DATA = "data";
+    String COLUMN_TAREFA_DATA_LIMITE = "data_limite";
+    String COLUMN_TAREFA_DATA_CRIACAO = "data_criacao";
+    String COLUMN_TAREFA_LATITUDE_CRIACAO = "latitude_criacao";
+    String COLUMN_TAREFA_LONGITUDE_CRIACAO = "longitude_criacao";
     String COLUMN_TAREFA_SINCRONIZADA = "sincronizada";
     String COLUMN_TAREFA_STATUS = "status";
     String COLUMN_TAREFA_TASKLY_ID= "taskly_id";

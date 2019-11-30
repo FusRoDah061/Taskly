@@ -105,11 +105,25 @@ public class TasklyWebClient {
         TarefaDTO dto = new TarefaDTO();
         dto.setDescricao(tarefa.getDescricao());
         dto.setProgresso(tarefa.getStatus() == EStatusTarefa.CONCLUIDA ? 100 : 0);
-        dto.setCreatedAt(tarefa.getData());
+        dto.setCreatedAt(tarefa.getDataCriacao());
         dto.setId(tarefa.getTasklyTaskId());
         dto.setAccount(tarefa.getTasklyAccount());
 
         return dto;
+    }
+
+    public static Tarefa mapTarefaDTOToTarefa(TarefaDTO tarefaDto) {
+        Tarefa tarefa = new Tarefa();
+
+        tarefa.setStatus(tarefaDto.getProgresso() == 100 ? EStatusTarefa.CONCLUIDA : EStatusTarefa.PENDENTE);
+        tarefa.setSincronizada(true);
+        tarefa.setDescricao(tarefaDto.getDescricao());
+        tarefa.setTasklyAccount(tarefaDto.getAccount());
+        tarefa.setTasklyTaskId(tarefaDto.getId());
+        tarefa.setDataCriacao(tarefaDto.getCreatedAt());
+        tarefa.setDataLimite(tarefaDto.getCreatedAt());
+
+        return tarefa;
     }
 
     public static void askTasklyAccount(final Context context) {

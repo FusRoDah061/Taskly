@@ -40,6 +40,8 @@ public class TarefaDAO {
                 tarefa.setDescricao(cursor.getString(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_DESCRICAO)));
                 tarefa.setSincronizada(cursor.getInt(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_SINCRONIZADA)) == 1);
                 tarefa.setStatus(EStatusTarefa.valueOf(cursor.getString(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_STATUS))));
+                tarefa.setLatitudeCriacao(cursor.getDouble(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_LATITUDE_CRIACAO)));
+                tarefa.setLongitudeCriacao(cursor.getDouble(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_LONGITUDE_CRIACAO)));
 
                 if(tarefa.isSincronizada()) {
                     tarefa.setTasklyTaskId(cursor.getLong(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_TASKLY_ID)));
@@ -47,7 +49,8 @@ public class TarefaDAO {
                 }
 
                 try {
-                    tarefa.setData(Constantes.SQLITE_DATE_TIME_FORMAT.parse(cursor.getString(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_DATA))));
+                    tarefa.setDataLimite(Constantes.SQLITE_DATE_TIME_FORMAT.parse(cursor.getString(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_DATA_LIMITE))));
+                    tarefa.setDataCriacao(Constantes.SQLITE_DATE_TIME_FORMAT.parse(cursor.getString(cursor.getColumnIndex(Constantes.COLUMN_TAREFA_DATA_CRIACAO))));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -56,6 +59,7 @@ public class TarefaDAO {
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
         db.close();
         return tarefas;
     }
@@ -67,9 +71,12 @@ public class TarefaDAO {
 
         ContentValues values = new ContentValues();
         values.put(Constantes.COLUMN_TAREFA_DESCRICAO, tarefa.getDescricao());
-        values.put(Constantes.COLUMN_TAREFA_DATA, Constantes.SQLITE_DATE_TIME_FORMAT.format(tarefa.getData()));
+        values.put(Constantes.COLUMN_TAREFA_DATA_LIMITE, Constantes.SQLITE_DATE_TIME_FORMAT.format(tarefa.getDataLimite()));
+        values.put(Constantes.COLUMN_TAREFA_DATA_CRIACAO, Constantes.SQLITE_DATE_TIME_FORMAT.format(tarefa.getDataCriacao()));
         values.put(Constantes.COLUMN_TAREFA_SINCRONIZADA, tarefa.isSincronizada() ? 1 : 0);
         values.put(Constantes.COLUMN_TAREFA_STATUS, tarefa.getStatus().toString());
+        values.put(Constantes.COLUMN_TAREFA_LATITUDE_CRIACAO, tarefa.getLatitudeCriacao());
+        values.put(Constantes.COLUMN_TAREFA_LONGITUDE_CRIACAO, tarefa.getLongitudeCriacao());
 
         if (tarefa.isSincronizada()) {
             values.put(Constantes.COLUMN_TAREFA_TASKLY_ID, tarefa.getTasklyTaskId());
@@ -84,8 +91,6 @@ public class TarefaDAO {
             db.setTransactionSuccessful();
         }
         catch (SQLException e) {
-            db.endTransaction();
-            db.close();
             e.printStackTrace();
             throw e;
         }
@@ -109,9 +114,12 @@ public class TarefaDAO {
 
         ContentValues values = new ContentValues();
         values.put(Constantes.COLUMN_TAREFA_DESCRICAO, tarefa.getDescricao());
-        values.put(Constantes.COLUMN_TAREFA_DATA, Constantes.SQLITE_DATE_TIME_FORMAT.format(tarefa.getData()));
+        values.put(Constantes.COLUMN_TAREFA_DATA_LIMITE, Constantes.SQLITE_DATE_TIME_FORMAT.format(tarefa.getDataLimite()));
+        values.put(Constantes.COLUMN_TAREFA_DATA_CRIACAO, Constantes.SQLITE_DATE_TIME_FORMAT.format(tarefa.getDataCriacao()));
         values.put(Constantes.COLUMN_TAREFA_SINCRONIZADA, tarefa.isSincronizada() ? 1 : 0);
         values.put(Constantes.COLUMN_TAREFA_STATUS, tarefa.getStatus().toString());
+        values.put(Constantes.COLUMN_TAREFA_LATITUDE_CRIACAO, tarefa.getLatitudeCriacao());
+        values.put(Constantes.COLUMN_TAREFA_LONGITUDE_CRIACAO, tarefa.getLongitudeCriacao());
 
         if (tarefa.isSincronizada()) {
             values.put(Constantes.COLUMN_TAREFA_TASKLY_ID, tarefa.getTasklyTaskId());

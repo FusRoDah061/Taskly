@@ -58,13 +58,13 @@ public class TarefaRepository {
         c.add(Calendar.DAY_OF_MONTH, qtdDias);
         limite = c.getTime();
 
-        String filter = String.format("data >= '%s' and data <= '%s'", Constantes.SQLITE_DATE_TIME_FORMAT.format(inicio), Constantes.SQLITE_DATE_TIME_FORMAT.format(limite));
+        String filter = String.format(Locale.getDefault(), "%s >= '%s' and %s <= '%s'", Constantes.COLUMN_TAREFA_DATA_LIMITE, Constantes.SQLITE_DATE_TIME_FORMAT.format(inicio), Constantes.COLUMN_TAREFA_DATA_LIMITE, Constantes.SQLITE_DATE_TIME_FORMAT.format(limite));
 
         return dao.get(filter);
     }
 
     public Tarefa findById(Long tarefaId) {
-        String filter = String.format("id = %d ", tarefaId);
+        String filter = String.format(Locale.getDefault(), "%s = %d ", Constantes.COLUMN_TAREFA_ID, tarefaId);
 
         try {
             return dao.get(filter).get(0);
@@ -76,7 +76,7 @@ public class TarefaRepository {
     }
 
     public Tarefa findByTasklyId(Long tarefaId) {
-        String filter = String.format(Locale.getDefault(), "taskly_id = %d", tarefaId);
+        String filter = String.format(Locale.getDefault(), "%s = %d", Constantes.COLUMN_TAREFA_TASKLY_ID, tarefaId);
 
         try {
             return dao.get(filter).get(0);
@@ -88,7 +88,7 @@ public class TarefaRepository {
     }
 
     public List<Tarefa> findAllFromDate(Date ref) {
-        String filter = String.format("data >= '%s'", Constantes.SQLITE_DATE_TIME_FORMAT.format(ref));
+        String filter = String.format(Locale.getDefault(), "%s >= '%s'", Constantes.COLUMN_TAREFA_DATA_LIMITE, Constantes.SQLITE_DATE_TIME_FORMAT.format(ref));
 
         return dao.get(filter);
     }
@@ -100,18 +100,18 @@ public class TarefaRepository {
         c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
 
-        String filter = String.format("data < '%s'", Constantes.SQLITE_DATE_TIME_FORMAT.format(c.getTime()));
+        String filter = String.format(Locale.getDefault(), "%s < '%s'", Constantes.COLUMN_TAREFA_DATA_LIMITE, Constantes.SQLITE_DATE_TIME_FORMAT.format(c.getTime()));
 
         return dao.get(filter);
     }
 
     public List<Tarefa> findByStatus(EStatusTarefa status) {
-        String filter = String.format("status = '%s'", status.getStatus());
+        String filter = String.format(Locale.getDefault(), "%s = '%s'", Constantes.COLUMN_TAREFA_STATUS, status.getStatus());
 
         return dao.get(filter);
     }
 
     public List<Tarefa> findAllSynced() {
-        return dao.get("sincronizada = 1");
+        return dao.get(String.format(Locale.getDefault(), "%s = 1", Constantes.COLUMN_TAREFA_SINCRONIZADA));
     }
 }

@@ -28,8 +28,8 @@ public class TarefaViewModel extends BaseViewModel {
     public TarefaViewModel(Tarefa tarefa, AsyncActivity activity) {
         super(tarefa, activity);
 
-        dataTarefa = Constantes.DATE_FORMAT.format(tarefa.getData());
-        horaTarefa = Constantes.TIME_FORMAT.format(tarefa.getData());
+        dataTarefa = Constantes.DATE_FORMAT.format(tarefa.getDataLimite());
+        horaTarefa = Constantes.TIME_FORMAT.format(tarefa.getDataLimite());
     }
 
     @Bindable
@@ -120,7 +120,7 @@ public class TarefaViewModel extends BaseViewModel {
     public void onContinuarClicked() {
         if (isInputDataValid()) {
             try {
-                tarefa.setData((Constantes.DATE_TIME_FORMAT.parse(String.format("%s %s", dataTarefa, horaTarefa))));
+                tarefa.setDataLimite((Constantes.DATE_TIME_FORMAT.parse(String.format("%s %s", dataTarefa, horaTarefa))));
 
                 goToNextFragment();
             } catch (ParseException e) {

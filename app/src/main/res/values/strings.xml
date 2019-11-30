@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Taskly</string>
+    <string name="title_activity_tarefa_propriedades">Detalhes</string>
     <string name="navigation_drawer_open">Abrir menu de navegação</string>
     <string name="navigation_drawer_close">Fechar menu de navegação</string>
     <string name="nav_header_title">Android Studio</string>
@@ -24,6 +25,9 @@
     <string name="nav_sobre">Sobre</string>
 
     <string name="error_account_null">A conta Taskly não pode ser vazia.</string>
+    <string name="error_sync_send_tarefa">Erro ao enviar a tarefa.</string>
+    <string name="error_sync_update_tarefa">Erro ao atualizar a tarefa.</string>
+    <string name="error_couldnt_get_location">Não foi possível obter sua localização</string>
 
     <string name="str_default_account_set">\u00A0 definida como conta Taskly padrão.</string>
     <string name="str_tarefa_sincronizada_aviso">Ah, e sua tarefa será sincronizada com sua lista no Taskly Web!</string>
@@ -34,6 +38,9 @@
     <string name="str_input_dialog_add_conta_noaccount">Nenhuma conta definida.</string>
     <string name="str_input_dialog_add_conta_noaccount_sync">Nenhuma conta definida. Para sincronizar a tarefa é preciso definir uma conta.</string>
     <string name="str_notification_channel_description">Canal de notificações do Taskly</string>
+    <string name="str_tarefa_sem_coord">Tarefa não contém informação de localização.</string>
+    <string name="str_tarefa_user_coord">Você está aqui</string>
+    <string name="str_tarefa_coord">Criada aqui em %s</string>
 
     <string-array name="dias_array">
         <item>Hoje</item>

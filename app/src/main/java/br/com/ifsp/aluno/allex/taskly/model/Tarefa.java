@@ -10,7 +10,10 @@ public class Tarefa implements Serializable {
 
     private Long id;
     private String descricao;
-    private Date data;
+    private Date dataLimite;
+    private Date dataCriacao;
+    private Double latitudeCriacao;
+    private Double longitudeCriacao;
     private boolean sincronizada;
     private EStatusTarefa status;
     private Long tasklyTaskId;
@@ -19,7 +22,8 @@ public class Tarefa implements Serializable {
     public Tarefa() {
         this.id = null;
         this.descricao = null;
-        this.data = new Date();
+        this.dataLimite = new Date();
+        this.dataCriacao = new Date();
         this.sincronizada = false;
         this.status = EStatusTarefa.PENDENTE;
         this.tasklyTaskId = null;
@@ -42,12 +46,36 @@ public class Tarefa implements Serializable {
         this.descricao = descricao;
     }
 
-    public Date getData() {
-        return data;
+    public Date getDataLimite() {
+        return dataLimite;
     }
 
-    public void setData(Date data) {
-        this.data = data;
+    public void setDataLimite(Date dataLimite) {
+        this.dataLimite = dataLimite;
+    }
+
+    public Date getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(Date dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
+
+    public Double getLatitudeCriacao() {
+        return latitudeCriacao;
+    }
+
+    public void setLatitudeCriacao(Double latitudeCriacao) {
+        this.latitudeCriacao = latitudeCriacao;
+    }
+
+    public Double getLongitudeCriacao() {
+        return longitudeCriacao;
+    }
+
+    public void setLongitudeCriacao(Double longitudeCriacao) {
+        this.longitudeCriacao = longitudeCriacao;
     }
 
     public boolean isSincronizada() {

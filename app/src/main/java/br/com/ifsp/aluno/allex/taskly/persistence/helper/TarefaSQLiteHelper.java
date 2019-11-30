@@ -34,7 +34,10 @@ public class TarefaSQLiteHelper extends SQLiteOpenHelper {
         String sql = "create table if not exists tarefa(" +
                      "  id integer primary key autoincrement," +
                      "  descricao varchar(100) not null," +
-                     "  data varchar(15) not null," +
+                     "  data_limite varchar(15) not null," +
+                     "  data_criacao varchar(15) default null," +
+                     "  latitude_criacao double default null," +
+                     "  longitude_criacao double default null," +
                      "  sincronizada integer not null default 0," +
                      "  status varchar(10) not null default 'PENDENTE'," +
                      "  taskly_id integer default null," +
@@ -44,3 +47,4 @@ public class TarefaSQLiteHelper extends SQLiteOpenHelper {
     }
 
 }
+

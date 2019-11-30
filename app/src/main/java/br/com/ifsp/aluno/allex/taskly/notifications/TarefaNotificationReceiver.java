@@ -52,7 +52,7 @@ public class TarefaNotificationReceiver extends BroadcastReceiver {
 
                         notificationBuilder.setSmallIcon(R.drawable.ic_event_note_black_24dp)
                                 .setContentTitle(tarefa.getDescricao())
-                                .setContentText(String.format("Tarefa agendada para as %s.", Constantes.DATE_TIME_FORMAT.format(tarefa.getData())));
+                                .setContentText(String.format("Tarefa agendada para as %s.", Constantes.DATE_TIME_FORMAT.format(tarefa.getDataLimite())));
 
                         notificationManager.notify((int) tarefaId, notificationBuilder.build());
                     }
@@ -71,13 +71,13 @@ public class TarefaNotificationReceiver extends BroadcastReceiver {
 
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, tarefa.getId().intValue(), intent, 0);
 
-        if(tarefa.getData().compareTo(new Date()) < 0)
+        if(tarefa.getDataLimite().compareTo(new Date()) < 0)
             return;
 
         if(tarefa.getStatus() == EStatusTarefa.CONCLUIDA)
             return;
 
-        mAlarmManager.setExact(AlarmManager.RTC_WAKEUP, tarefa.getData().getTime(), alarmIntent);
+        mAlarmManager.setExact(AlarmManager.RTC_WAKEUP, tarefa.getDataLimite().getTime(), alarmIntent);
 
         ComponentName receiver = new ComponentName(context, BootReceiver.class);
         PackageManager pm = context.getPackageManager();
