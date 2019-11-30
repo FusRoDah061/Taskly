@@ -1,19 +1,18 @@
 package br.com.ifsp.aluno.allex.taskly.notifications;
 
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.legacy.content.WakefulBroadcastReceiver;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import br.com.ifsp.aluno.allex.taskly.Constantes;
@@ -22,8 +21,8 @@ import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
 import br.com.ifsp.aluno.allex.taskly.model.Tarefa;
 import br.com.ifsp.aluno.allex.taskly.persistence.repository.TarefaRepository;
 
-public class TarefaNotificationReceiver extends WakefulBroadcastReceiver {
-    // TODO: WakefulBroadcastReceiver não chama no andorid 9
+public class TarefaNotificationReceiver extends BroadcastReceiver {
+
     private AlarmManager mAlarmManager;
 
     public void onReceive(Context context, Intent intent) {
@@ -38,18 +37,31 @@ public class TarefaNotificationReceiver extends WakefulBroadcastReceiver {
 
                 if(tarefa.getStatus() == EStatusTarefa.PENDENTE) {
 
+                    NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, Constantes.NOTIFICATION_CHANNEL_ID);
-                    notificationBuilder.setSmallIcon(R.drawable.ic_event_note_black_24dp)
-                            .setContentTitle(tarefa.getDescricao())
-                            .setContentText(String.format("Tarefa agendada para as %s.", Constantes.DATE_TIME_FORMAT.format(tarefa.getData())));
 
-                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-                    notificationManager.notify((int) tarefaId, notificationBuilder.build());
+                    try {
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            NotificationChannel channel = new NotificationChannel(Constantes.NOTIFICATION_CHANNEL_ID, Constantes.NOTIFICATION_CHANNEL_ID, NotificationManager.IMPORTANCE_HIGH);
+                            channel.setDescription(context.getResources().getString(R.string.str_notification_channel_description));
+                            channel.enableLights(false);
+                            channel.enableVibration(true);
+
+                            notificationManager.createNotificationChannel(channel);
+                        }
+
+                        notificationBuilder.setSmallIcon(R.drawable.ic_event_note_black_24dp)
+                                .setContentTitle(tarefa.getDescricao())
+                                .setContentText(String.format("Tarefa agendada para as %s.", Constantes.DATE_TIME_FORMAT.format(tarefa.getData())));
+
+                        notificationManager.notify((int) tarefaId, notificationBuilder.build());
+                    }
+                    catch (NullPointerException e){
+                        e.printStackTrace();
+                    }
                 }
             }
         }
-
-        TarefaNotificationReceiver.completeWakefulIntent(intent);
     }
 
     public void scheduleNotification(Context context, Tarefa tarefa) {

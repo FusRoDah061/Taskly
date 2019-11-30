@@ -33,6 +33,7 @@
     <string name="str_input_dialog_add_conta_negbutton">Cancelar</string>
     <string name="str_input_dialog_add_conta_noaccount">Nenhuma conta definida.</string>
     <string name="str_input_dialog_add_conta_noaccount_sync">Nenhuma conta definida. Para sincronizar a tarefa é preciso definir uma conta.</string>
+    <string name="str_notification_channel_description">Canal de notificações do Taskly</string>
 
     <string-array name="dias_array">
         <item>Hoje</item>
