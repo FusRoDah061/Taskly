@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +26,9 @@ public class TarefaDAO {
     public List<Tarefa> get(String where) {
         List<Tarefa> tarefas = new ArrayList<>();
 
-        db = helper.getWritableDatabase();
+        db = helper.getReadableDatabase();
 
-        String sql = String.format("select * from %s %s", Constantes.TABLE_TAREFA, (where != null ? " where " + where : ""));
+        String sql = String.format("select * from %s %s", Constantes.TABLE_TAREFA, (where != null ? "where " + where : ""));
 
         Cursor cursor = db.rawQuery(sql, null);
 

@@ -31,8 +31,6 @@ public interface Constantes {
     int DIAS_SEMANA = 7;
     int DIAS_MES = 30;
 
-    int REQ_CODE_DIALOG_CONTA_TASKLY = 1;
-
     String NOTIFICATION_CHANNEL_ID = "TASKLY_NOTIFICATION_CHANNEL_ID";
 
     String PREF_NAME = "TASKLY_PREFS";

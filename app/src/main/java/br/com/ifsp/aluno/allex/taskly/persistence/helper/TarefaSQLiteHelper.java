@@ -10,7 +10,6 @@ import br.com.ifsp.aluno.allex.taskly.Constantes;
 
 public class TarefaSQLiteHelper extends SQLiteOpenHelper {
 
-
     public TarefaSQLiteHelper(@Nullable Context context) {
         super(context, Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
     }
@@ -38,8 +37,8 @@ public class TarefaSQLiteHelper extends SQLiteOpenHelper {
                      "  data varchar(15) not null," +
                      "  sincronizada integer not null default 0," +
                      "  status varchar(10) not null default 'PENDENTE'," +
-                     "  taskly_id integer," +
-                     "  taskly_account varchar(256));";
+                     "  taskly_id integer default null," +
+                     "  taskly_account varchar(256) default null)";
 
         db.execSQL(sql);
     }

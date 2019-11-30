@@ -5,6 +5,7 @@ import android.content.Context;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import br.com.ifsp.aluno.allex.taskly.Constantes;
 import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
@@ -75,7 +76,7 @@ public class TarefaRepository {
     }
 
     public Tarefa findByTasklyId(Long tarefaId) {
-        String filter = String.format("taskly_id = %d ", tarefaId);
+        String filter = String.format(Locale.getDefault(), "taskly_id = %d", tarefaId);
 
         try {
             return dao.get(filter).get(0);
