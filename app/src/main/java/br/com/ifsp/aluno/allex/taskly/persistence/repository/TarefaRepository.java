@@ -109,4 +109,8 @@ public class TarefaRepository {
 
         return dao.get(filter);
     }
+
+    public List<Tarefa> findAllSynced() {
+        return dao.get("sincronizada = 1");
+    }
 }

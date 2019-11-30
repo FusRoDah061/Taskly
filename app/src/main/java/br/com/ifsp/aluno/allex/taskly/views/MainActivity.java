@@ -93,12 +93,14 @@ public class MainActivity extends AsyncActivity
                         public void run() {
 
                             final TarefaRepository tarefaRepository = new TarefaRepository(MainActivity.this);
-                            //TODO: REmover tarefas que estão marcadas como sincronizadas mas que não existem mais no web
 
                             if(tarefasRemotas != null) {
+                                List<Tarefa> tarefasSincronizadasParaRemover = tarefaRepository.findAllSynced();
+
                                 for (TarefaDTO tarefaDTO : tarefasRemotas) {
 
                                     Tarefa tarefa = tarefaRepository.findByTasklyId(tarefaDTO.getId());
+                                    tarefasSincronizadasParaRemover.remove(tarefa);
 
                                     if(tarefa == null) {
                                         tarefa = new Tarefa();
@@ -116,6 +118,10 @@ public class MainActivity extends AsyncActivity
                                     }
 
                                     tarefaRepository.save(tarefa);
+                                }
+
+                                for(Tarefa tarefa : tarefasSincronizadasParaRemover) {
+                                    tarefaRepository.delete(tarefa);
                                 }
 
                             }

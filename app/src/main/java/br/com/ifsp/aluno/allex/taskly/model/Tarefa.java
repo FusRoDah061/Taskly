@@ -2,6 +2,7 @@ package br.com.ifsp.aluno.allex.taskly.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 import br.com.ifsp.aluno.allex.taskly.enums.EStatusTarefa;
 
@@ -79,5 +80,18 @@ public class Tarefa implements Serializable {
 
     public void setTasklyAccount(String tasklyAccount) {
         this.tasklyAccount = tasklyAccount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tarefa tarefa = (Tarefa) o;
+        return Objects.equals(getId(), tarefa.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
